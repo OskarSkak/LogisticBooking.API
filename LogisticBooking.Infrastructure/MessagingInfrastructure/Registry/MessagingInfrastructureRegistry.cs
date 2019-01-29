@@ -3,6 +3,7 @@ using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Infrastructure.MessagingInfrastructure.Factory;
 using LogisticBooking.Infrastructure.MessagingInfrastructure.Mediators;
 using LogisticBooking.Persistence.Registry;
+using LogisticBooking.Queries.Registry;
 using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Infrastructure.MessagingInfrastructure.Registry
@@ -19,6 +20,7 @@ namespace LogisticBooking.Infrastructure.MessagingInfrastructure.Registry
 
 
             IncludeRegistry<CommandRegistry>();
+            IncludeRegistry<QueryRegistry>();
 	        
             IncludeRegistry<PersistenceRegistry>();
         }

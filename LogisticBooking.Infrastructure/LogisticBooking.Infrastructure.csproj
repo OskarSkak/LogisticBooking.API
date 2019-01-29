@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LogisticBooking.Domain\LogisticBooking.Domain.csproj" />
+      <ProjectReference Include="..\LogisticBooking.Queries\LogisticBooking.Queries.csproj" />
     </ItemGroup>
 
 </Project>
