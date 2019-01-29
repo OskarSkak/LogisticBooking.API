@@ -1,7 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SimpleSoft.Mediator" Version="1.0.0" />
+      <PackageReference Include="SimpleSoft.Mediator.Abstractions" Version="1.0.0" />
+      <PackageReference Include="StructureMap" Version="4.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LogisticBooking.Domain\LogisticBooking.Domain.csproj" />
+      <ProjectReference Include="..\LogisticBooking.Queries\LogisticBooking.Queries.csproj" />
+    </ItemGroup>
 
 </Project>
