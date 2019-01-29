@@ -4,3 +4,7 @@ LogisticBooking.API.sln.DotSettings.user
 LogisticBooking.API/bin
 LogisticBooking.Documents/obj
 LogisticBooking.Documents/bin
+LogisticBooking.Domain/obj
+LogisticBooking.Infrastructure/obj
+LogisticBooking.Persistence/obj
+LogisticBooking.Queries/obj
