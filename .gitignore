@@ -1,3 +1,5 @@
 .idea
 LogisticBooking.API/obj
 LogisticBooking.API.sln.DotSettings.user
+LogisticBooking.API/bin
+LogisticBooking.Documents/obj
