@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using LogisticBooking.API.RequestModels;
 using LogisticBooking.Documents.Documents;
 using LogisticBooking.Domain.Commands;
+
+
 using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Queries.Queries;
@@ -15,12 +17,9 @@ namespace LogisticBooking.API.Controllers
     [ApiController]
     public class OrderController : BaseController
     {
-        
-
-        public OrderController(ICommandRouter commandRouter, IQueryRouter queryRouter) : base(commandRouter,
+        public OrderController(ICommandRouter commandRouter, IQueryRouter queryRouter): base(commandRouter,
             queryRouter)
         {
-            
         }
 
         [HttpPost]
@@ -29,7 +28,7 @@ namespace LogisticBooking.API.Controllers
             var result = await
                 CommandRouter.RouteAsync<CreateOrderCommand, IdResponse>(
                     new CreateOrderCommand(orderRequestModel.OrderName));
-
+            
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
             
         }

@@ -11,6 +11,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LogisticBooking.Documents\LogisticBooking.Documents.csproj" />
+      <ProjectReference Include="..\LogisticBooking.Events\LogisticBooking.Events.csproj" />
+      <ProjectReference Include="..\LogisticBooking.Infrastructure\LogisticBooking.Infrastructure.csproj" />
       <ProjectReference Include="..\LogisticBooking.Persistence\LogisticBooking.Persistence.csproj" />
     </ItemGroup>
 
