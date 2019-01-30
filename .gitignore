@@ -43,5 +43,3 @@ Generated\ Files/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 .vscode
-.DS_Store
-omnisharp.json
