@@ -38,7 +38,7 @@ namespace LogisticBooking.Persistence.BaseRepository
                 conn.Open();
 
                 
-                var a = conn.InsertAsync(valueList);
+                var a = await conn.InsertAsync(valueList);
                 return a as T;
             }
         }
@@ -63,8 +63,8 @@ namespace LogisticBooking.Persistence.BaseRepository
             {
                 conn.Open();
 
-                var a = conn.Get<T>(id);
-                return a;
+                var result = await conn.GetAsync<T>(id);
+                return result;
 
             }
         }
@@ -93,24 +93,12 @@ namespace LogisticBooking.Persistence.BaseRepository
             {
                 conn.Open();
 
-                return conn.Delete(value);
+                var result = await conn.DeleteAsync(value);
+                return result;
             }
         }
 
-        public async Task<bool> DeleteManyAsync(IEnumerable<T> valueList)
-        {
-            if (valueList.Equals(null))
-            {
-                return false;
-            }
-            
-            using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
-            {
-                conn.Open();
-
-                return conn.Delete(valueList);
-            }
-        }
+       
 
     }
 }
