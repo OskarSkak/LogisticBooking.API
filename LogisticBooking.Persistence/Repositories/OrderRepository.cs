@@ -16,5 +16,11 @@ namespace LogisticBooking.Persistence.Repositories
         {
             
         }
+
+        public void test() {
+            
+        }
+            
+        
     }
 }
