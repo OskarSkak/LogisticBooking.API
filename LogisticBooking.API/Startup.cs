@@ -56,6 +56,7 @@ namespace LogisticBooking.API
             FluentMapper.Initialize(options =>
             {
                 options.AddMap(new OrderMap());
+                options.AddMap(new TransporterMap());
                 options.ForDommel();
             });
             

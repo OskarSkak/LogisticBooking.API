@@ -1,0 +1,39 @@
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using LogisticBooking.Documents.Documents;
+using LogisticBooking.Domain.Commands;
+using LogisticBooking.Events.Events;
+using LogisticBooking.Infrastructure.MessagingContracts;
+using LogisticBooking.Persistence.Models;
+using LogisticBooking.Persistence.Repositories;
+using SimpleSoft.Mediator;
+
+namespace LogisticBooking.Domain.CommandHandlers
+{
+    public class TransporterHandler : ICommandHandler<CreateTransporterCommand, IdResponse>
+    {
+        private readonly ITransporterRepository _transporterRepository;
+        private readonly IEventRouter _eventRouter;
+
+        public TransporterHandler(ITransporterRepository transporterRepository, IEventRouter eventRouter)
+        {
+            _transporterRepository = transporterRepository;
+            _eventRouter = eventRouter;
+        }
+
+        public async Task<IdResponse> HandleAsync(CreateTransporterCommand cmd, CancellationToken ct)
+        {
+            var result = await _transporterRepository.InsertAsync(new Transporter
+            {
+                ID = cmd.ID,
+                Name = cmd.Name,
+                Telephone = cmd.Telephone,
+                Address = cmd.Address,
+                Email = cmd.Email
+            });
+
+            return new IdResponse(cmd.ID); 
+        }
+    }
+}
