@@ -57,6 +57,7 @@ namespace LogisticBooking.API
             {
                 options.AddMap(new OrderMap());
                 options.AddMap(new TransporterMap());
+                options.AddMap(new SupplierMap()); 
                 options.ForDommel();
             });
             
