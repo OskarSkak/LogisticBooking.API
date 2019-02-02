@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LogisticBooking.API.RequestModels;
 using LogisticBooking.Documents.Documents;
@@ -29,11 +30,30 @@ namespace LogisticBooking.API.Controllers
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
+        //Needs to check for empties or nulls, fix after GetById is implemented!
+        [HttpPut]
+        public async Task<IActionResult> UpdateTransporter([FromBody] TransporterRequestModel transporterRequestModel)
+        {
+            var result = await CommandRouter.RouteAsync<UpdateTransporterCommand, IdResponse>(
+                new UpdateTransporterCommand(transporterRequestModel.Email, transporterRequestModel.Telephone, 
+                transporterRequestModel.Address, transporterRequestModel.Name)
+                );
+            return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetTransporters()
         {
             var result = await QueryRouter.QueryAsync<TransportersQuery, IList<Transporter>>(new TransportersQuery());
 
+            return new ObjectResult(result);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetBydId(Guid id)
+        {
+            var result = await QueryRouter.QueryAsync<GetTransporterById, Transporter>(new GetTransporterById(id));
             return new ObjectResult(result);
         }
 

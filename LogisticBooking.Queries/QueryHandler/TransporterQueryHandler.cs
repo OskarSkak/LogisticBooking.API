@@ -9,7 +9,7 @@ using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Queries.QueryHandler
 {
-    public class TransporterQueryHandler : IQueryHandler<TransportersQuery, IList<Transporter>>
+    public class TransporterQueryHandler : IQueryHandler<TransportersQuery, IList<Transporter>>, IQueryHandler<GetTransporterById, Transporter>
     {
         private readonly ITransporterRepository _transporterRepository;
 
@@ -22,6 +22,12 @@ namespace LogisticBooking.Queries.QueryHandler
         {
             var result = await _transporterRepository.GetAllAsync();
             return result.ToList();
+        }
+
+        public async Task<Transporter> HandleAsync(GetTransporterById query, CancellationToken ct)
+        {
+            var result = await _transporterRepository.GetByIdAsync(query.Id);
+            return result;
         }
     }
 }
