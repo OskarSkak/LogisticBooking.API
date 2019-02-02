@@ -29,5 +29,13 @@ namespace LogisticBooking.API.Controllers
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTransporters()
+        {
+            var result = await QueryRouter.QueryAsync<TransportersQuery, IList<Transporter>>(new TransportersQuery());
+
+            return new ObjectResult(result);
+        }
+
     }
 }
