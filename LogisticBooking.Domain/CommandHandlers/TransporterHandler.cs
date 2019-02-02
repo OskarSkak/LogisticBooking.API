@@ -11,7 +11,7 @@ using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
-    public class TransporterHandler : ICommandHandler<CreateTransporterCommand, IdResponse>
+    public class TransporterHandler : ICommandHandler<CreateTransporterCommand, IdResponse>, ICommandHandler<UpdateTransporterCommand, IdResponse>
     {
         private readonly ITransporterRepository _transporterRepository;
         private readonly IEventRouter _eventRouter;
@@ -34,6 +34,19 @@ namespace LogisticBooking.Domain.CommandHandlers
             });
 
             return new IdResponse(cmd.ID); 
+        }
+
+        public async Task<IdResponse> HandleAsync(UpdateTransporterCommand cmd, CancellationToken ct)
+        {
+            var result = await _transporterRepository.UpdateAsync(new Transporter
+            {
+                Name = cmd.Name, 
+                Telephone = cmd.Telephone, 
+                Address = cmd.Address, 
+                Email = cmd.Email,
+                ID = cmd.id
+            });
+            return new IdResponse(cmd.Id); 
         }
     }
 }

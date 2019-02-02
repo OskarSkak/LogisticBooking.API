@@ -32,11 +32,25 @@ namespace LogisticBooking.API.Controllers
 
         //Needs to check for empties or nulls, fix after GetById is implemented!
         [HttpPut]
-        public async Task<IActionResult> UpdateTransporter([FromBody] TransporterRequestModel transporterRequestModel)
+        [Route("id")]
+        public async Task<IActionResult> UpdateTransporter(Guid id, [FromBody] TransporterRequestModel transporterRequestModel)
         {
+            var Transporter = await QueryRouter.QueryAsync<GetTransporterById, Transporter>(new GetTransporterById(id));
+            if(Transporter != null)
+            {
+                if (String.IsNullOrEmpty(transporterRequestModel.Name))
+                    transporterRequestModel.Name = Transporter.Name;
+                if (String.IsNullOrEmpty(transporterRequestModel.Address))
+                    transporterRequestModel.Address = Transporter.Address;
+                if (transporterRequestModel.Telephone == 0)
+                    transporterRequestModel.Telephone = Transporter.Telephone;
+                if (String.IsNullOrEmpty(transporterRequestModel.Email))
+                    transporterRequestModel.Email = Transporter.Email;
+            }
+
             var result = await CommandRouter.RouteAsync<UpdateTransporterCommand, IdResponse>(
                 new UpdateTransporterCommand(transporterRequestModel.Email, transporterRequestModel.Telephone, 
-                transporterRequestModel.Address, transporterRequestModel.Name)
+                transporterRequestModel.Address, transporterRequestModel.Name, id)
                 );
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
