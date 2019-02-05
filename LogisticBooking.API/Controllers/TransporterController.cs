@@ -7,10 +7,12 @@ using LogisticBooking.Domain.Commands;
 using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Queries.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticBooking.API.Controllers
 {
+    [Authorize]
     [Route ("api/transporters")]
     [ApiController]
     public class TransporterController : BaseController
