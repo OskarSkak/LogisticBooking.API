@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LogisticBooking.API.RequestModels;
 using LogisticBooking.Documents.Documents;
@@ -60,6 +61,10 @@ namespace LogisticBooking.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTransporters()
         {
+            var CurrentUser = User.Claims.FirstOrDefault((c => c.Type == "sub")).Value;
+
+            Console.WriteLine(CurrentUser);
+        
             var result = await QueryRouter.QueryAsync<TransportersQuery, IList<Transporter>>(new TransportersQuery());
 
             return new ObjectResult(result);
