@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticBooking.API.Controllers
 {
-    [Authorize]
+    
     [Route ("api/transporters")]
     [ApiController]
     public class TransporterController : BaseController
@@ -58,12 +58,13 @@ namespace LogisticBooking.API.Controllers
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
+        
         [HttpGet]
         public async Task<IActionResult> GetTransporters()
         {
-            var CurrentUser = User.Claims.FirstOrDefault((c => c.Type == "sub")).Value;
+            //var CurrentUser = User.Claims.FirstOrDefault((c => c.Type == "sub")).Value;
 
-            Console.WriteLine(CurrentUser);
+           // Console.WriteLine(CurrentUser);
         
             var result = await QueryRouter.QueryAsync<TransportersQuery, IList<Transporter>>(new TransportersQuery());
 

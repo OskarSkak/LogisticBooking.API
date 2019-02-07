@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dommel;
 using LogisticBooking.Persistence.ConnectionStrings;
@@ -19,7 +20,7 @@ namespace LogisticBooking.Persistence.BaseRepository
 
         public async Task<object> InsertAsync(T value)
         {
-            using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
+            using (var conn = new SqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
 

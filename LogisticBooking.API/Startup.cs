@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using Dapper.FluentMap;
 using Dapper.FluentMap.Dommel;
 using IdentityServer4.AccessTokenValidation;
+using LogisticBooking.Persistence.BaseRepository;
 using LogisticBooking.Persistence.Models;
+using LogisticBooking.Persistence.Repositories;
+using LogisticBooking.Persistence.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,6 +47,10 @@ namespace LogisticBooking.API
                     options.ApiName = "logisticbookingapi";
                 });
             
+            var connectionString =
+                "Server=tcp:logisticsolutions.database.windows.net,1433;Initial Catalog=LogisticSolution.Identity;Persist Security Info=False;User ID=caspha17;Password=Hansen93!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            services.AddDbContext<RegistrationCodeDbContext>(o => o.UseSqlServer(connectionString , b => b.MigrationsAssembly("LogisticBooking.API")));
             
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -73,6 +81,7 @@ namespace LogisticBooking.API
                 options.AddMap(new OrderMap());
                 options.AddMap(new TransporterMap());
                 options.AddMap(new SupplierMap()); 
+                options.AddMap(new RegistationsKeyMap());
                 options.ForDommel();
             });
             
@@ -84,7 +93,7 @@ namespace LogisticBooking.API
                 //Start registering stuff in container, stuff is defined from the included registries. The stuff is registered at our service, so they are at our disposal.
                 config.Populate(services);
             });
-
+            
             //Assert validation. This tries a full test, to see if all the configuration are truely valid, and can be configured
             container.AssertConfigurationIsValid();
 
