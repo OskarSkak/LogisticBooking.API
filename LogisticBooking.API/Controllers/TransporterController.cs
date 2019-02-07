@@ -32,7 +32,7 @@ namespace LogisticBooking.API.Controllers
 
         //Needs to check for empties or nulls, fix after GetById is implemented!
         [HttpPut]
-        [Route("id")]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateTransporter(Guid id, [FromBody] TransporterRequestModel transporterRequestModel)
         {
             var Transporter = await QueryRouter.QueryAsync<GetTransporterById, Transporter>(new GetTransporterById(id));
