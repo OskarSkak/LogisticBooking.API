@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper.FluentMap;
 using Dapper.FluentMap.Dommel;
+using IdentityServer4.AccessTokenValidation;
 using LogisticBooking.Persistence.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using StructureMap;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -30,6 +32,19 @@ namespace LogisticBooking.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+
+            IdentityModelEventSource.ShowPII = true;
+            
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "https://localhost:5025";
+                    options.RequireHttpsMetadata = true;
+                    options.ApiName = "logisticbookingapi";
+                });
+            
+            
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
             // Swagger added
@@ -100,6 +115,7 @@ namespace LogisticBooking.API
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
