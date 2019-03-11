@@ -47,11 +47,8 @@ namespace LogisticBooking.API
                     options.ApiName = "logisticbookingapi";
                 });
             
-            var connectionString =
-                "Server=tcp:logisticsolutions.database.windows.net,1433;Initial Catalog=LogisticSolution.Identity;Persist Security Info=False;User ID=caspha17;Password=Hansen93!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+   
 
-            services.AddDbContext<RegistrationCodeDbContext>(o => o.UseSqlServer(connectionString , b => b.MigrationsAssembly("LogisticBooking.API")));
-            
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             

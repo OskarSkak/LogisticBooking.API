@@ -9,15 +9,18 @@ namespace LogisticBooking.Persistence.Models
     {
         public RegistationsKeyMap()
         {
-            ToTable("RegistrationKey");
-            Map(x => x.id).IsKey().ToColumn("id");
-            Map(x => x.email).ToColumn("email");
+            ToTable("Users");
+            Map(x => x.SubjectId).IsKey().ToColumn("SubjectId");
+            Map(x => x.Username).ToColumn("Username");
+            Map(x => x.IsActive).ToColumn("IsActive");
         }
     }
     
     public class RegistrationKey
     {
-        public string id { get; set; }
-        public string email { get; set; }
+        public string SubjectId { get; set; }
+        public string Username { get; set; }
+        
+        public bool IsActive { get; set; }
     }
 }

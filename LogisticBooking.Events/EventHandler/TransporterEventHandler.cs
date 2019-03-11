@@ -29,12 +29,9 @@ namespace LogisticBooking.Events.EventHandler
         {
             var HashKey = new RegistrationKey();
             var guid = Guid.NewGuid();
-            HashKey.email = "test123@test.dk";
-
-            var salt = BCryptHelper.GenerateSalt();
-            
-            var enc = BCrypt.Net.BCrypt.HashPassword(guid.ToString() , salt);
-            HashKey.id = enc;
+            HashKey.SubjectId = guid.ToString();
+            HashKey.Username = evt.Email;
+            HashKey.IsActive = false;
             var key = "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";
             var client = new SendGridClient(key);
             var from = new EmailAddress("test@test.dk");

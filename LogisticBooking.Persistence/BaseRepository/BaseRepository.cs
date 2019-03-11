@@ -20,7 +20,7 @@ namespace LogisticBooking.Persistence.BaseRepository
 
         public async Task<object> InsertAsync(T value)
         {
-            using (var conn = new SqlConnection(_connectionString.ConnectionString))
+            using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
 

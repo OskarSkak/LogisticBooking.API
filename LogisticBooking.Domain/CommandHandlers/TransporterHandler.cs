@@ -34,7 +34,9 @@ namespace LogisticBooking.Domain.CommandHandlers
                 Email = cmd.Email
             });
 
-            _eventRouter.EventAsync(new TransporterCreatedEvent());
+            var transporter = new TransporterCreatedEvent();
+            transporter.Email = cmd.Email;
+            _eventRouter.EventAsync(transporter);
 
             return new IdResponse(cmd.ID); 
         }
