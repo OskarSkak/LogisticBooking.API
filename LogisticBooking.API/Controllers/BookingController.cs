@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 
 namespace LogisticBooking.API.Controllers
-{
+{/*
     [Route("api/bookings")]
     [ApiController]
     public class BookingController : BaseController
@@ -39,5 +39,5 @@ namespace LogisticBooking.API.Controllers
 
             return new ObjectResult(result);
         }
-    }
+    }*/
 }

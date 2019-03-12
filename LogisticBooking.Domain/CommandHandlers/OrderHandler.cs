@@ -10,7 +10,7 @@ using LogisticBooking.Persistence.Repositories;
 using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
-{
+{/*
     public class OrderHandler : ICommandHandler<CreateOrderCommand , IdResponse>
     {
         private readonly IOrderRepository _orderRepository;
@@ -39,5 +39,5 @@ namespace LogisticBooking.Domain.CommandHandlers
             
             return new IdResponse(id);
         }
-    }
+    }*/
 }
