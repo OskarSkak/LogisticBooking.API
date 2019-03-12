@@ -39,6 +39,7 @@ namespace LogisticBooking.Domain.CommandHandlers
 
         public async Task<IdResponse> HandleAsync(CreateTransporterCommand cmd, CancellationToken ct)
         {
+            
             var result = await _transporterRepository.InsertAsync(new Transporter
             {
                 ID = cmd.ID,
@@ -47,6 +48,10 @@ namespace LogisticBooking.Domain.CommandHandlers
                 Address = cmd.Address,
                 Email = cmd.Email
             });
+
+            var transporter = new TransporterCreatedEvent();
+            transporter.Email = cmd.Email;
+            _eventRouter.EventAsync(transporter);
 
             return new IdResponse(cmd.ID); 
         }
