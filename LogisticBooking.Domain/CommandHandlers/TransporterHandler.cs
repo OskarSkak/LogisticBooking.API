@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
@@ -14,11 +15,13 @@ namespace LogisticBooking.Domain.CommandHandlers
     public class TransporterHandler : ICommandHandler<CreateTransporterCommand, IdResponse>, ICommandHandler<UpdateTransporterCommand, IdResponse>, 
         ICommandHandler<DeleteTransporterCommand, IdResponse>
     {
+        private readonly IRegistrationRepository _registrationRepository;
         private readonly ITransporterRepository _transporterRepository;
         private readonly IEventRouter _eventRouter;
 
-        public TransporterHandler(ITransporterRepository transporterRepository, IEventRouter eventRouter)
+        public TransporterHandler(ITransporterRepository transporterRepository, IEventRouter eventRouter , IRegistrationRepository registrationRepository)
         {
+            _registrationRepository = registrationRepository;
             _transporterRepository = transporterRepository;
             _eventRouter = eventRouter;
         }
@@ -39,21 +42,38 @@ namespace LogisticBooking.Domain.CommandHandlers
 
         public async Task<IdResponse> HandleAsync(CreateTransporterCommand cmd, CancellationToken ct)
         {
-            
-            var result = await _transporterRepository.InsertAsync(new Transporter
+            var guid = Guid.NewGuid();
+            // Create the transporter in the backend database
+            var BackendResult = await _transporterRepository.InsertAsync(new Transporter
             {
-                ID = cmd.ID,
+                ID = guid,
                 Name = cmd.Name,
                 Telephone = cmd.Telephone,
                 Address = cmd.Address,
                 Email = cmd.Email
             });
 
+            if (BackendResult == null)
+            {
+                //#TODO  Spørg oskar hvad vi skal her? skal vi throwe exceprtion?
+                return null;
+            }
+
+            await _registrationRepository.InsertAsync(new RegistrationKey
+            {
+                Username = cmd.Email,
+                SubjectId = guid.ToString(),
+                IsActive = false
+            });
+
+            
+            
             var transporter = new TransporterCreatedEvent();
             transporter.Email = cmd.Email;
+            transporter.Id = guid;
             _eventRouter.EventAsync(transporter);
 
-            return new IdResponse(cmd.ID); 
+            return new IdResponse(guid); 
         }
 
         public async Task<IdResponse> HandleAsync(UpdateTransporterCommand cmd, CancellationToken ct)

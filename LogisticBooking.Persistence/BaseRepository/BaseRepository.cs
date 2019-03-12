@@ -26,7 +26,6 @@ namespace LogisticBooking.Persistence.BaseRepository
 
 
                 var a = await conn.InsertAsync(value);
-                Console.WriteLine(a.GetType());
                 return a;
             }
         }

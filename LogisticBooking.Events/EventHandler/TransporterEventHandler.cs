@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using DevOne.Security.Cryptography.BCrypt;
@@ -24,29 +25,25 @@ namespace LogisticBooking.Events.EventHandler
             _registrationRepository = registrationRepository;
         }
         
-        
+        /***
+         * This event is raised when a Transporter is created.
+         * The send an email with a activation link to the transporter
+         */
         public async Task HandleAsync(TransporterCreatedEvent evt, CancellationToken ct)
         {
-            var HashKey = new RegistrationKey();
-            var guid = Guid.NewGuid();
-            HashKey.SubjectId = guid.ToString();
-            HashKey.Username = evt.Email;
-            HashKey.IsActive = false;
+            
+            // >Options for sendgrid
             var key = "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";
             var client = new SendGridClient(key);
-            var from = new EmailAddress("test@test.dk");
-            var subject = "Activation link";
-            var to = new EmailAddress("caspha17@gmail.com");
-            var plaintext = "easy peasy";
-            var htmlContent = "https://localhost:5025/CreateUser/"+ guid;
+            var from = new EmailAddress("AutoMail@LogisticSolutions.dk");
+            var subject = "Activation link to Booking Planner";
+            var to = new EmailAddress(evt.Email);
+            var plaintext = "Hi and welcome to Booking planner\n To activate you're account you have to visit the link attached in this email and create a passsword. \n If you have any issues please contact us  ";
+            var htmlContent = plaintext +  "https://localhost:5025/CreateUser/"+ evt.Id;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plaintext, htmlContent);
             var response = await client.SendEmailAsync(msg);
-            Console.WriteLine(response);
-
-           var result = await _registrationRepository.InsertAsync(HashKey);
-           Console.WriteLine(result);
-
-
+            
+            //#TODO check for hvilken exception den kalder hvis emailem er forkert
 
         }
     }
