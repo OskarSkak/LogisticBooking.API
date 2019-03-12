@@ -11,7 +11,8 @@ using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
-    public class SupplierHandler : ICommandHandler<CreateSupplierCommand, IdResponse>, ICommandHandler<DeleteSupplierCommand, IdResponse>
+    public class SupplierHandler : ICommandHandler<CreateSupplierCommand, IdResponse>, ICommandHandler<DeleteSupplierCommand, IdResponse>, 
+        ICommandHandler<UpdateSupplierCommand, IdResponse>
     {
         private readonly ISupplierRepository _supplierRepository;
         private readonly IEventRouter _eventRouter;
@@ -46,6 +47,19 @@ namespace LogisticBooking.Domain.CommandHandlers
 
             var result = await _supplierRepository.DeleteByTAsync(supplier);
             
+            return new IdResponse(cmd.Id);
+        }
+
+        public async Task<IdResponse> HandleAsync(UpdateSupplierCommand cmd, CancellationToken ct)
+        {
+            var result = await _supplierRepository.UpdateAsync(new Supplier
+            {
+                Name = cmd.Name,
+                Email = cmd.Email,
+                Telephone = cmd.Telephone, 
+                ID = cmd.id
+                
+            });
             return new IdResponse(cmd.Id);
         }
     }

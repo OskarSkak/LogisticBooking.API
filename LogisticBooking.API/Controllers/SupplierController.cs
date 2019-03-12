@@ -8,6 +8,7 @@ using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Queries.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.HPack;
 
 namespace LogisticBooking.API.Controllers
 {
@@ -40,8 +41,17 @@ namespace LogisticBooking.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateSupplier(Guid id, [FromBody] SupplierRequestModel supplierRequestModel)
         {
-            //var supplier = await QueryRouter
-            return null;
+            var supplier = await QueryRouter.QueryAsync<GetSupplierById, Supplier>(new GetSupplierById(id));
+            
+            if (String.IsNullOrEmpty(supplierRequestModel.Name)) supplierRequestModel.Name = supplier.Name;
+            if (String.IsNullOrEmpty(supplierRequestModel.Email)) supplierRequestModel.Email = supplier.Email;
+            if (supplierRequestModel.Telephone == 0) supplierRequestModel.Telephone = supplier.Telephone;
+
+            var result = await CommandRouter.RouteAsync<UpdateSupplierCommand, IdResponse>(
+                new UpdateSupplierCommand(supplierRequestModel.Email, supplierRequestModel.Telephone,
+                    supplierRequestModel.Name, id)
+            );
+            return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
         [HttpGet]
