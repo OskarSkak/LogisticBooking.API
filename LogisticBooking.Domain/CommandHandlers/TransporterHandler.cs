@@ -11,7 +11,8 @@ using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
-    public class TransporterHandler : ICommandHandler<CreateTransporterCommand, IdResponse>, ICommandHandler<UpdateTransporterCommand, IdResponse>
+    public class TransporterHandler : ICommandHandler<CreateTransporterCommand, IdResponse>, ICommandHandler<UpdateTransporterCommand, IdResponse>, 
+        ICommandHandler<DeleteTransporterCommand, IdResponse>
     {
         private readonly ITransporterRepository _transporterRepository;
         private readonly IEventRouter _eventRouter;
@@ -20,6 +21,20 @@ namespace LogisticBooking.Domain.CommandHandlers
         {
             _transporterRepository = transporterRepository;
             _eventRouter = eventRouter;
+        }
+
+        public async Task<IdResponse> HandleAsync(DeleteTransporterCommand cmd, CancellationToken ct)
+        {
+            if (cmd.Id.Equals(Guid.Empty))
+            {
+                return IdResponse.Unsuccessful("Id is empty");
+            }
+
+            var transporter = await _transporterRepository.GetByIdAsync(cmd.id);
+
+            var result = await _transporterRepository.DeleteByTAsync(transporter);
+            
+            return new IdResponse(cmd.Id);
         }
 
         public async Task<IdResponse> HandleAsync(CreateTransporterCommand cmd, CancellationToken ct)

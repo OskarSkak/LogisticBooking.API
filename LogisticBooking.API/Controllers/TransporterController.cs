@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticBooking.API.Controllers
 {
-    [Authorize]
+    
     [Route ("api/transporters")]
     [ApiController]
     public class TransporterController : BaseController
@@ -38,6 +38,9 @@ namespace LogisticBooking.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> UpdateTransporter(Guid id, [FromBody] TransporterRequestModel transporterRequestModel)
         {
+            //var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+            
+            
             var Transporter = await QueryRouter.QueryAsync<GetTransporterById, Transporter>(new GetTransporterById(id));
             if(Transporter != null)
             {
@@ -58,12 +61,22 @@ namespace LogisticBooking.API.Controllers
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteTransporter(Guid id)
+        {
+            
+            var result =
+                await CommandRouter.RouteAsync<DeleteTransporterCommand, IdResponse>(new DeleteTransporterCommand(id));
+            return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetTransporters()
         {
-            var CurrentUser = User.Claims.FirstOrDefault((c => c.Type == "sub")).Value;
+           // var CurrentUser = User.Claims.FirstOrDefault((c => c.Type == "sub")).Value;
 
-            Console.WriteLine(CurrentUser);
+           // Console.WriteLine(CurrentUser);
         
             var result = await QueryRouter.QueryAsync<TransportersQuery, IList<Transporter>>(new TransportersQuery());
 
@@ -77,6 +90,8 @@ namespace LogisticBooking.API.Controllers
             var result = await QueryRouter.QueryAsync<GetTransporterById, Transporter>(new GetTransporterById(id));
             return new ObjectResult(result);
         }
+
+        
 
     }
 }

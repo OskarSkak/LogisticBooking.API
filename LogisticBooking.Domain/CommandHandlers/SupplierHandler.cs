@@ -11,7 +11,7 @@ using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
-    public class SupplierHandler : ICommandHandler<CreateSupplierCommand, IdResponse>
+    public class SupplierHandler : ICommandHandler<CreateSupplierCommand, IdResponse>, ICommandHandler<DeleteSupplierCommand, IdResponse>
     {
         private readonly ISupplierRepository _supplierRepository;
         private readonly IEventRouter _eventRouter;
@@ -33,6 +33,20 @@ namespace LogisticBooking.Domain.CommandHandlers
             });
 
             return new IdResponse(cmd.ID);
+        }
+        
+        public async Task<IdResponse> HandleAsync(DeleteSupplierCommand cmd, CancellationToken ct)
+        {
+            if (cmd.Id.Equals(Guid.Empty))
+            {
+                return IdResponse.Unsuccessful("Id is empty");
+            }
+
+            var supplier = await _supplierRepository.GetByIdAsync(cmd.id);
+
+            var result = await _supplierRepository.DeleteByTAsync(supplier);
+            
+            return new IdResponse(cmd.Id);
         }
     }
 }
