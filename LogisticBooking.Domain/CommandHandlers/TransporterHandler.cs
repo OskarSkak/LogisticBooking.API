@@ -37,6 +37,12 @@ namespace LogisticBooking.Domain.CommandHandlers
 
             var result = await _transporterRepository.DeleteByTAsync(transporter);
             
+            var transporterDeletedEvent = new TransporterDeletedEvent
+            {
+                TransporterId = cmd.id
+            };
+            _eventRouter.EventAsync(transporterDeletedEvent);
+            
             return new IdResponse(cmd.Id);
         }
 

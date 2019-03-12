@@ -1,6 +1,7 @@
 using System;
 using System.Data.SqlClient;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using DevOne.Security.Cryptography.BCrypt;
@@ -15,7 +16,7 @@ using IRegistrationRepository = LogisticBooking.Persistence.Repositories.IRegist
 
 namespace LogisticBooking.Events.EventHandler
 {
-    public class TransporterEventHandler : IEventHandler<TransporterCreatedEvent>
+    public class TransporterEventHandler : IEventHandler<TransporterCreatedEvent> , IEventHandler<TransporterDeletedEvent>
     {
         private readonly IRegistrationRepository _registrationRepository;
 
@@ -45,6 +46,15 @@ namespace LogisticBooking.Events.EventHandler
             
             //#TODO check for hvilken exception den kalder hvis emailem er forkert
 
+        }
+
+        public Task HandleAsync(TransporterDeletedEvent evt, CancellationToken ct)
+        {
+            // Delete transporter identityserver;
+            HttpClient client = new HttpClient();
+
+            var result = client.PostAsync("https://localhost:5025/user/" +evt.Id +  "" , null);
+            return null;
         }
     }
 }
