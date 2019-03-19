@@ -40,7 +40,7 @@ namespace LogisticBooking.Events.EventHandler
             var subject = "Activation link to Booking Planner";
             var to = new EmailAddress(evt.Email);
             var plaintext = "Hi and welcome to Booking planner\n To activate you're account you have to visit the link attached in this email and create a passsword. \n If you have any issues please contact us  ";
-            var htmlContent = plaintext +  "https://localhost:5025/CreateUser/"+ evt.Id;
+            var htmlContent = plaintext +  "https://localhost:5025/user/"+ evt.Id;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plaintext, htmlContent);
             var response = await client.SendEmailAsync(msg);
             
@@ -52,8 +52,7 @@ namespace LogisticBooking.Events.EventHandler
         {
             // Delete transporter identityserver;
             HttpClient client = new HttpClient();
-
-            var result = client.PostAsync("https://localhost:5025/user/" +evt.Id +  "" , null);
+            var result = client.PostAsync("https://localhost:5025/user/" +evt.TransporterId +  "" , null);
             return null;
         }
     }
