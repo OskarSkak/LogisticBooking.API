@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
 using LogisticBooking.Domain.Commands;
+using LogisticBooking.Domain.Commands.Order;
 using LogisticBooking.Events.Events;
 using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
@@ -10,8 +11,10 @@ using LogisticBooking.Persistence.Repositories;
 using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
-{/*
-    public class OrderHandler : ICommandHandler<CreateOrderCommand , IdResponse>
+{
+    public class OrderHandler : ICommandHandler<CreateOrderCommand , IdResponse>,
+    ICommandHandler<DeleteOrderCommand, IdResponse>,
+    ICommandHandler<UpdateOrderCommand, IdResponse>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IEventRouter _eventRouter;
@@ -22,22 +25,41 @@ namespace LogisticBooking.Domain.CommandHandlers
             _orderRepository = orderRepository;
             _eventRouter = eventRouter;
         }
-        
+
+
         public async Task<IdResponse> HandleAsync(CreateOrderCommand cmd, CancellationToken ct)
         {
-
-            var id = Guid.NewGuid();
             var result = await _orderRepository.InsertAsync(new Order
             {
-                OrderName = cmd.OrderName,
-                id = id
+                id = cmd.id,
+                bookingId = cmd.bookingId,
+                customerNumber = cmd.customerNumber,
+                InOut = cmd.InOut,
+                orderNumber = cmd.orderNumber,
+                wareNumber = cmd.wareNumber
             });
-
-                // Do this to raise an event
-            _eventRouter.EventAsync(new OrderCreatedEvent());
-            
-            
-            return new IdResponse(id);
+            return new IdResponse(cmd.id);
         }
-    }*/
+
+        public async Task<IdResponse> HandleAsync(DeleteOrderCommand cmd, CancellationToken ct)
+        {
+            var order = await _orderRepository.GetByIdAsync(cmd.id);
+            var result = await _orderRepository.DeleteByTAsync(order);
+            return new IdResponse(cmd.id);
+        }
+
+        public async Task<IdResponse> HandleAsync(UpdateOrderCommand cmd, CancellationToken ct)
+        {
+            var result = await _orderRepository.UpdateAsync(new Order
+            {
+                id = cmd.id,
+                bookingId = cmd.bookingId,
+                customerNumber = cmd.customerNumber,
+                InOut = cmd.InOut,
+                orderNumber = cmd.orderNumber,
+                wareNumber = cmd.wareNumber
+            });
+            return new IdResponse(cmd.id);
+        }
+    }
 }

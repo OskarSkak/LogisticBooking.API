@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using LogisticBooking.API.RequestModels;
 using LogisticBooking.Documents.Documents;
 using LogisticBooking.Domain.Commands;
+using LogisticBooking.Domain.Commands.Booking;
 using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Queries.Queries;
+using LogisticBooking.Queries.Queries.Booking;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace LogisticBooking.API.Controllers
-{/*
+{
     [Route("api/bookings")]
     [ApiController]
     public class BookingController : BaseController
@@ -21,23 +24,74 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewOrder([FromBody] OrderRequestModel orderRequestModel)
+        public async Task<IActionResult> CreateNewBooking([FromBody] BookingRequestModel bookingRequestModel)
         {
-            var result = await
-                CommandRouter.RouteAsync<CreateOrderCommand, IdResponse>(
-                    new CreateOrderCommand(orderRequestModel.OrderName));
-
-
+            var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
+                new CreateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
+                    bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
-
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetOrders()
+        public async Task<IActionResult> GetBookings()
         {
-            var result = await QueryRouter.QueryAsync<OrdersQuery, IList<Order>>(new OrdersQuery());
-
+            var result = await QueryRouter.QueryAsync<BookingsQuery, IList<Booking>>(new BookingsQuery());
             return new ObjectResult(result);
         }
-    }*/
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetBookingById(Guid id)
+        {
+            var result = await QueryRouter.QueryAsync<GetBookingById, Booking>(new GetBookingById(id));
+            return new ObjectResult(result);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteBookingById(Guid id)
+        {
+            var result = await CommandRouter.RouteAsync<DeleteBookingCommand, IdResponse>(new DeleteBookingCommand(id));
+            return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateBooking([FromBody] BookingRequestModel bookingRequestModel, Guid id)
+        {
+            var booking = await QueryRouter.QueryAsync<GetBookingById, Booking>(new GetBookingById(id));
+
+            if (booking != null)
+            {
+                if (bookingRequestModel.totalPallets == 0)
+                    bookingRequestModel.totalPallets = booking.totalPallets;
+                if (DateTimeEmpty(bookingRequestModel.bookingTime))
+                    bookingRequestModel.bookingTime = booking.bookingTime;
+                if (String.IsNullOrEmpty(bookingRequestModel.transporterName))
+                    bookingRequestModel.transporterName = booking.transporterName;
+                if (bookingRequestModel.port == 0)
+                    bookingRequestModel.port = booking.port;
+                if (DateTimeEmpty(bookingRequestModel.actualArrival))
+                    bookingRequestModel.actualArrival = booking.actualArrival;
+                if (DateTimeEmpty(bookingRequestModel.startLoading))
+                    bookingRequestModel.startLoading = booking.startLoading;
+                if (DateTimeEmpty(bookingRequestModel.endLoading))
+                    bookingRequestModel.endLoading = booking.endLoading;
+                if (String.IsNullOrEmpty(bookingRequestModel.email))
+                    bookingRequestModel.email = booking.email;
+            }
+
+            var result = await CommandRouter.RouteAsync<UpdateBookingCommand, IdResponse>(
+                new UpdateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
+                    bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email, id));
+            return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
+        }
+
+        public static bool DateTimeEmpty(DateTime dateTime)
+        {
+            return dateTime == default(DateTime);
+        }
+    }
 }

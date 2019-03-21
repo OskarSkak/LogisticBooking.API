@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using StructureMap;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -75,10 +76,11 @@ namespace LogisticBooking.API
             
             FluentMapper.Initialize(options =>
             {
-                options.AddMap(new OrderMap());
                 options.AddMap(new TransporterMap());
                 options.AddMap(new SupplierMap()); 
                 options.AddMap(new RegistationsKeyMap());
+                options.AddMap(new BookingMap());
+                options.AddMap(new OrderMap());
                 options.ForDommel();
             });
             

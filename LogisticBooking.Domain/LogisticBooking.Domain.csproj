@@ -16,9 +16,4 @@
       <ProjectReference Include="..\LogisticBooking.Persistence\LogisticBooking.Persistence.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Commands\Booking" />
-      <Folder Include="Commands\Order" />
-    </ItemGroup>
-
 </Project>
