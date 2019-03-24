@@ -26,6 +26,7 @@ namespace LogisticBooking.Persistence.BaseRepository
 
 
                 var a = await conn.InsertAsync(value);
+                
                 return a;
             }
         }
@@ -39,7 +40,7 @@ namespace LogisticBooking.Persistence.BaseRepository
 
                 
                 var a = await conn.InsertAsync(valueList);
-                return a as T;
+                return a;
             }
         }
     //***********************UPDATE ***************************

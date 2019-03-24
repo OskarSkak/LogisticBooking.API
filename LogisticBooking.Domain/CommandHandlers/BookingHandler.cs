@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
@@ -6,6 +9,7 @@ using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Persistence.Repositories;
 using SimpleSoft.Mediator;
+using StructureMap.Building;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
@@ -15,18 +19,25 @@ namespace LogisticBooking.Domain.CommandHandlers
 
     {
         private readonly IEventRouter _eventRouter;
+        private readonly IOrderRepository _orderRepository;
         private readonly IBookingRepository _bookingRepository;
 
-        public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter)
+        public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter , IOrderRepository orderRepository)
         {
             _bookingRepository = bookingRepository;
             _eventRouter = eventRouter;
+            _orderRepository = orderRepository;
         }
         
         public async Task<IdResponse> HandleAsync(CreateBookingCommand cmd, CancellationToken ct)
         {
+            // set time on booking
+            DateTime bookingTime = cmd.bookingTime;
+            TimeSpan timeSpan = new TimeSpan(DateTime.Now.Hour,DateTime.Now.Minute,DateTime.Now.Second);
+            bookingTime = bookingTime + timeSpan;
             var result = await _bookingRepository.InsertAsync(new Booking
             {
+                
                 internalId = cmd.internalId,
                 email = cmd.email,
                 endLoading = cmd.endLoading,
@@ -34,9 +45,35 @@ namespace LogisticBooking.Domain.CommandHandlers
                 totalPallets = cmd.totalPallets,
                 actualArrival = cmd.actualArrival,
                 transporterName = cmd.transporterName,
-                bookingTime = cmd.bookingTime,
-                port = cmd.port
-            }); 
+                bookingTime = bookingTime,
+                port = cmd.port,
+                TransporterId = cmd.TransporterId
+                
+            });
+
+            Console.WriteLine("test");   
+
+            List<Order> orders = new List<Order>();
+            
+            foreach (var order in cmd.Orders)
+            {
+                
+                orders.Add(new Order
+                {
+                    bookingId = cmd.internalId,
+                    customerNumber = order.customerNumber,
+                    id = Guid.NewGuid(),
+                    InOut = order.InOut,
+                    orderNumber = order.orderNumber,
+                    wareNumber = order.wareNumber
+                });
+            }
+
+            foreach (var order in orders)
+            {
+               await _orderRepository.InsertAsync(order);
+            }
+
             return new IdResponse(cmd.Id);
         }
 

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Design;
 using StructureMap.Building;
 using Dapper.FluentMap.Dommel.Mapping;
@@ -19,6 +21,7 @@ namespace LogisticBooking.Persistence.Models
             Map(x => x.startLoading).ToColumn("StartLoading");
             Map(x => x.endLoading).ToColumn("EndLoading");
             Map(x => x.email).ToColumn("Email");
+            Map(x => x.Orders).Ignore();
         }
     }
     
@@ -31,7 +34,13 @@ namespace LogisticBooking.Persistence.Models
         public DateTime actualArrival { get; set; }
         public DateTime startLoading { get; set; }
         public DateTime endLoading { get; set; }
+        
+        [ForeignKey("bookingid")]
         public Guid internalId { get; set; }
         public string email { get; set; }
+        
+        public List<Order> Orders { get; set; }
+        
+        public Guid TransporterId { get; set; }
     }
 }

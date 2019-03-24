@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using LogisticBooking.Persistence.Models;
 
 namespace LogisticBooking.API.RequestModels
 {
@@ -12,5 +14,7 @@ namespace LogisticBooking.API.RequestModels
         public DateTime startLoading { get; set; }
         public DateTime endLoading { get; set; }
         public string email { get; set; }
+        
+        public List<OrderRequestModel> OrderViewModels { get; set; }
     }
 }

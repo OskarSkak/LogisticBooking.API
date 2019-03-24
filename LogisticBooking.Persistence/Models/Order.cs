@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Dapper.FluentMap.Dommel.Mapping;
 
 namespace LogisticBooking.Persistence.Models
@@ -21,6 +22,8 @@ namespace LogisticBooking.Persistence.Models
     public class Order
     {
         public Guid id { get; set; }
+        
+        [ForeignKey("internalid")]
         public Guid bookingId { get; set; }
         public string customerNumber { get; set; }
         public string orderNumber { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using LogisticBooking.Documents.Documents;
 using SimpleSoft.Mediator;
 
@@ -6,6 +7,7 @@ namespace LogisticBooking.Domain.Commands.Booking
 {
     public class CreateBookingCommand : Command<IdResponse>
     {
+        private readonly Guid _transporterId;
         public int totalPallets { get; set; }
         public DateTime bookingTime { get; set; }
         public string transporterName { get; set; }
@@ -16,8 +18,15 @@ namespace LogisticBooking.Domain.Commands.Booking
         public Guid internalId { get; set; }
         public string email { get; set; }
         
-        public CreateBookingCommand(int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email)
+        public Guid TransporterId { get; set; }
+        
+
+        public List<Persistence.Models.Order> Orders { get; set; }
+
+
+        public CreateBookingCommand(int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email , List<Persistence.Models.Order> orders, Guid transporterId)
         {
+            TransporterId = transporterId;
             this.totalPallets = totalPallets;
             this.bookingTime = bookingTime;
             this.transporterName = transporterName;
@@ -26,7 +35,9 @@ namespace LogisticBooking.Domain.Commands.Booking
             this.startLoading = startLoading;
             this.endLoading = endLoading;
             this.email = email;
+            Orders = orders;
             this.internalId = Guid.NewGuid();
+            
         }
        
         public CreateBookingCommand(){}

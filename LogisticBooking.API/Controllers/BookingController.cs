@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LogisticBooking.API.RequestModels;
 using LogisticBooking.Documents.Documents;
@@ -9,6 +10,7 @@ using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Queries.Queries;
 using LogisticBooking.Queries.Queries.Booking;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -24,12 +26,31 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateNewBooking([FromBody] BookingRequestModel bookingRequestModel)
         {
+            
+            var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+            Guid LoggedInID = new Guid(loggedIn);
+            
+            List<Order> orders = new List<Order>();
+
+            foreach (var order in bookingRequestModel.OrderViewModels)
+            {
+               orders.Add(new Order
+               {
+                   bookingId = order.bookingId,
+                   customerNumber = order.customerNumber,
+                   wareNumber = order.wareNumber,
+                   orderNumber = order.orderNumber,
+                   InOut = order.InOut
+               }); 
+            }
+            
             var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
                 new CreateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
                     bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
-                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email));
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID ));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
