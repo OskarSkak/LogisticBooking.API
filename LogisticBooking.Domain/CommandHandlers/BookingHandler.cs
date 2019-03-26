@@ -20,21 +20,29 @@ namespace LogisticBooking.Domain.CommandHandlers
     {
         private readonly IEventRouter _eventRouter;
         private readonly IOrderRepository _orderRepository;
+        private readonly ITransporterRepository _transporterRepository;
         private readonly IBookingRepository _bookingRepository;
 
-        public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter , IOrderRepository orderRepository)
+        public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter , IOrderRepository orderRepository , ITransporterRepository transporterRepository)
         {
             _bookingRepository = bookingRepository;
             _eventRouter = eventRouter;
             _orderRepository = orderRepository;
+            _transporterRepository = transporterRepository;
         }
         
         public async Task<IdResponse> HandleAsync(CreateBookingCommand cmd, CancellationToken ct)
         {
-            // set time on booking
-            DateTime bookingTime = cmd.bookingTime;
-            TimeSpan timeSpan = new TimeSpan(DateTime.Now.Hour,DateTime.Now.Minute,DateTime.Now.Second);
-            bookingTime = bookingTime + timeSpan;
+
+            
+            if (String.IsNullOrEmpty(cmd.transporterName))
+            {
+                var transporter = await _transporterRepository.GetByIdAsync(cmd.TransporterId);
+                cmd.transporterName = transporter.Name;
+            }
+
+          
+            
             var result = await _bookingRepository.InsertAsync(new Booking
             {
                 
@@ -45,13 +53,12 @@ namespace LogisticBooking.Domain.CommandHandlers
                 totalPallets = cmd.totalPallets,
                 actualArrival = cmd.actualArrival,
                 transporterName = cmd.transporterName,
-                bookingTime = bookingTime,
+                bookingTime = cmd.bookingTime,
                 port = cmd.port,
                 TransporterId = cmd.TransporterId
                 
             });
-
-            Console.WriteLine("test");   
+  
 
             List<Order> orders = new List<Order>();
             

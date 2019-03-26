@@ -23,7 +23,7 @@ namespace LogisticBooking.Persistence.Models
     {
         public Guid id { get; set; }
         
-        [ForeignKey("internalid")]
+        
         public Guid bookingId { get; set; }
         public string customerNumber { get; set; }
         public string orderNumber { get; set; }
