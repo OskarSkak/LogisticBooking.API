@@ -23,6 +23,7 @@ namespace LogisticBooking.API
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
+                . UseUrls("http://localhost:5001/")
                 .UseStartup<Startup>();
     }
 }
