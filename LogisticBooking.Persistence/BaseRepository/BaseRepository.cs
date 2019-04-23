@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dommel;
 using LogisticBooking.Persistence.ConnectionStrings;
@@ -25,7 +26,7 @@ namespace LogisticBooking.Persistence.BaseRepository
 
 
                 var a = await conn.InsertAsync(value);
-                Console.WriteLine(a.GetType());
+                
                 return a;
             }
         }
@@ -38,8 +39,8 @@ namespace LogisticBooking.Persistence.BaseRepository
                 conn.Open();
 
                 
-                var a = conn.InsertAsync(valueList);
-                return a as T;
+                var a = await conn.InsertAsync(valueList);
+                return a;
             }
         }
     //***********************UPDATE ***************************
@@ -63,8 +64,8 @@ namespace LogisticBooking.Persistence.BaseRepository
             {
                 conn.Open();
 
-                var a = conn.Get<T>(id);
-                return a;
+                var result = await conn.GetAsync<T>(id);
+                return result;
 
             }
         }
@@ -93,24 +94,12 @@ namespace LogisticBooking.Persistence.BaseRepository
             {
                 conn.Open();
 
-                return conn.Delete(value);
+                var result = await conn.DeleteAsync(value);
+                return result;
             }
         }
 
-        public async Task<bool> DeleteManyAsync(IEnumerable<T> valueList)
-        {
-            if (valueList.Equals(null))
-            {
-                return false;
-            }
-            
-            using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
-            {
-                conn.Open();
-
-                return conn.Delete(valueList);
-            }
-        }
+       
 
     }
 }

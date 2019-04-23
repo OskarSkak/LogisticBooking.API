@@ -7,6 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="Dapper.FluentMap.Dommel" Version="1.5.0" />
+        <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="1.4.0" />
@@ -16,9 +17,14 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LogisticBooking.Domain\LogisticBooking.Domain.csproj" />
+      <ProjectReference Include="..\LogisticBooking.Events\LogisticBooking.Events.csproj" />
       <ProjectReference Include="..\LogisticBooking.Infrastructure\LogisticBooking.Infrastructure.csproj" />
       <ProjectReference Include="..\LogisticBooking.Persistence\LogisticBooking.Persistence.csproj" />
       <ProjectReference Include="..\LogisticBooking.Queries\LogisticBooking.Queries.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>

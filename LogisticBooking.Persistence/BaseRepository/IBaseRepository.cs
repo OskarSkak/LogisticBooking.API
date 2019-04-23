@@ -25,7 +25,7 @@ namespace LogisticBooking.Persistence.BaseRepository
         
         /// <summary>
         ///
-        /// Update a specfic object in the database based on the primary key
+        /// Update a specific object in the database based on the primary key
         /// </summary>
         /// <param name="value"></param>
         /// <returns>true if the object is updated</returns>
@@ -41,7 +41,7 @@ namespace LogisticBooking.Persistence.BaseRepository
 
 
         /// <summary>
-        /// Get all objects from at tabel
+        /// Get all objects from at table
         /// </summary>
         /// <param name="queryId"></param>
         /// <returns>A list og objects</returns>
@@ -56,13 +56,6 @@ namespace LogisticBooking.Persistence.BaseRepository
         /// <returns>true if the object is deleted</returns>
         Task<bool> DeleteByTAsync(T value);
         
-        
-        /// <summary>
-        ///
-        /// Delete a list of object in the db
-        /// </summary>
-        /// <param name="valueList"></param>
-        /// <returns>true if all the objects were deleted</returns>
-        Task<bool> DeleteManyAsync(IEnumerable<T> valueList);
     }
+       
 }

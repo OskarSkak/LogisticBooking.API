@@ -4,15 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper.FluentMap;
 using Dapper.FluentMap.Dommel;
+using IdentityServer4.AccessTokenValidation;
+using LogisticBooking.Persistence.BaseRepository;
 using LogisticBooking.Persistence.Models;
+using LogisticBooking.Persistence.Repositories;
+using LogisticBooking.Persistence.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using StructureMap;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -30,6 +37,20 @@ namespace LogisticBooking.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+
+            IdentityModelEventSource.ShowPII = true;
+            
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "https://localhost:5025";
+                    options.RequireHttpsMetadata = true;
+                    options.ApiName = "logisticbookingapi";
+                });
+            
+   
+
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
             // Swagger added
@@ -55,6 +76,10 @@ namespace LogisticBooking.API
             
             FluentMapper.Initialize(options =>
             {
+                options.AddMap(new TransporterMap());
+                options.AddMap(new SupplierMap()); 
+                options.AddMap(new RegistationsKeyMap());
+                options.AddMap(new BookingMap());
                 options.AddMap(new OrderMap());
                 options.ForDommel();
             });
@@ -67,7 +92,7 @@ namespace LogisticBooking.API
                 //Start registering stuff in container, stuff is defined from the included registries. The stuff is registered at our service, so they are at our disposal.
                 config.Populate(services);
             });
-
+            
             //Assert validation. This tries a full test, to see if all the configuration are truely valid, and can be configured
             container.AssertConfigurationIsValid();
 
@@ -98,6 +123,7 @@ namespace LogisticBooking.API
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

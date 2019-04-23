@@ -16,9 +16,9 @@ namespace LogisticBooking.Documents.Documents
             return new IdResponse(id);
         }
 
-        public static IdResponse Unsuccessful(string messeage = null, Exception exception = null)
+        public new static IdResponse Unsuccessful(string message = null, Exception exception = null)
         {
-            return new IdResponse(Guid.Empty, false, messeage, exception);
+            return new IdResponse(Guid.Empty, false, message, exception);
         }
     }
 }

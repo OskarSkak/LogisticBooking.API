@@ -12,9 +12,13 @@ namespace LogisticBooking.Persistence.Repositories
     
     public class OrderRepository : BaseRepository<Order> , IOrderRepository
     {
+        
         public OrderRepository(IConnectionString connectionString) : base(connectionString)
         {
             
         }
+
+         
+        
     }
 }
