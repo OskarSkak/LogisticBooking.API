@@ -15,13 +15,14 @@ namespace LogisticBooking.API
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
-            System.Console.WriteLine("STARTING");
+            
 
             
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
                 .UseStartup<Startup>();
     }
 }
