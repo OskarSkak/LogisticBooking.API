@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dapper.FluentMap;
 using Dapper.FluentMap.Dommel;
 using IdentityServer4.AccessTokenValidation;
+using LogisticBooking.API.ConfigHelpers;
 using LogisticBooking.Persistence.BaseRepository;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Persistence.Repositories;
@@ -27,9 +28,15 @@ namespace LogisticBooking.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _environment;
+
+        
+        
+        public Startup(IHostingEnvironment env, IConfiguration config)
         {
-            Configuration = configuration;
+            _configuration = config;
+            _environment = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -37,13 +44,21 @@ namespace LogisticBooking.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            
+            services.Configure<FrontendServerConfiguration>(
+                _configuration.GetSection(nameof(FrontendServerConfiguration)));
+            services.Configure<IdentityServerConfiguration>(
+                _configuration.GetSection(nameof(IdentityServerConfiguration)));
 
             IdentityModelEventSource.ShowPII = true;
+
+            var identityServer = _configuration.GetSection(nameof(IdentityServerConfiguration))
+                .Get<IdentityServerConfiguration>();
             
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "https://localhost:5025";
+                    options.Authority = $"{identityServer.IdentityServerUrl}";
                     options.RequireHttpsMetadata = true;
                     options.ApiName = "logisticbookingapi";
                 });
