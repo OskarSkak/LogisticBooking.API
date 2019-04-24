@@ -15,7 +15,7 @@ namespace LogisticBooking.API
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
-            System.Console.WriteLine("STARTING");
+            
 
             
         }
