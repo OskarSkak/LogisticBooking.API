@@ -46,3 +46,4 @@ Generated\ Files/
 .DS_Store
 omnisharp.json
 *.user
+LogisticBooking.API/publish

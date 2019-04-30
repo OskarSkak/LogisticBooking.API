@@ -46,6 +46,7 @@ namespace LogisticBooking.Persistence.Repositories
                 var dictionary = new Dictionary<Guid, Booking>();
 
                 string sql = "SELECT * from bookings as A INNER JOIN orders o on A.internalid = o.bookingid";
+                
                 var list = conn.Query<Booking, Order, Booking>(sql, (booking, order ) =>
                 {
                     Booking bookingEntry;
