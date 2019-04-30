@@ -8,7 +8,7 @@ namespace LogisticBooking.API.RequestModels
     {
         
         
-        
+        public int ExternalId { get; set; }
         public int totalPallets { get; set; }
         public DateTime bookingTime { get; set; }
         public string transporterName { get; set; }

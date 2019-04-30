@@ -23,6 +23,11 @@ namespace LogisticBooking.Persistence.Models
     {
         public Guid id { get; set; }
         
+        public string Comment { get; set; }
+        
+        public int TotalPallets { get; set; }
+        public int BottomPallets { get; set; }
+        public string ExternalId { get; set; }
         
         public Guid bookingId { get; set; }
         public string customerNumber { get; set; }

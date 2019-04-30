@@ -22,6 +22,8 @@ namespace LogisticBooking.Persistence.Models
             Map(x => x.endLoading).ToColumn("EndLoading");
             Map(x => x.email).ToColumn("Email");
             Map(x => x.Orders).Ignore();
+            Map(x => x.ExternalId).ToColumn("externalid");
+            
         }
 
         
@@ -29,6 +31,10 @@ namespace LogisticBooking.Persistence.Models
 
     public class Booking
     {
+        
+        
+    public int ExternalId { get; set; }
+        
     public int totalPallets { get; set; }
     public DateTime bookingTime { get; set; }
     public string transporterName { get; set; }

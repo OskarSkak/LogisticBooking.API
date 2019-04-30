@@ -26,13 +26,12 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateNewBooking([FromBody] BookingRequestModel bookingRequestModel)
         {
             
-            var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
-            Guid LoggedInID = new Guid(loggedIn);
-            
+           // var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+           // Guid LoggedInID = new Guid(loggedIn);
+          var  LoggedInID = Guid.NewGuid();
             List<Order> orders = new List<Order>();
 
             foreach (var order in bookingRequestModel.OrderViewModels)
@@ -50,7 +49,7 @@ namespace LogisticBooking.API.Controllers
             var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
                 new CreateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
                     bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
-                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID ));
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID, bookingRequestModel.ExternalId ));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
@@ -111,12 +110,16 @@ namespace LogisticBooking.API.Controllers
                     bookingRequestModel.endLoading = booking.endLoading;
                 if (String.IsNullOrEmpty(bookingRequestModel.email))
                     bookingRequestModel.email = booking.email;
+                if (bookingRequestModel.ExternalId == 0)
+                {
+                    bookingRequestModel.ExternalId = booking.ExternalId; 
+                }
             }
 
             var result = await CommandRouter.RouteAsync<UpdateBookingCommand, IdResponse>(
                 new UpdateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
                     bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
-                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email, id));
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email, id , bookingRequestModel.ExternalId));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 

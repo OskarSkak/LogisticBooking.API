@@ -57,7 +57,8 @@ namespace LogisticBooking.Domain.CommandHandlers
                 transporterName = cmd.transporterName,
                 bookingTime = cmd.bookingTime,
                 port = cmd.port,
-                TransporterId = cmd.TransporterId
+                TransporterId = cmd.TransporterId,
+                ExternalId = cmd.ExternalId
                 
             });
   
@@ -105,7 +106,8 @@ namespace LogisticBooking.Domain.CommandHandlers
                 internalId = cmd.internalId,
                 startLoading = cmd.startLoading,
                 totalPallets = cmd.totalPallets,
-                transporterName = cmd.transporterName
+                transporterName = cmd.transporterName,
+                ExternalId = cmd.ExternalId
             });
             return new IdResponse(cmd.Id);
         }
