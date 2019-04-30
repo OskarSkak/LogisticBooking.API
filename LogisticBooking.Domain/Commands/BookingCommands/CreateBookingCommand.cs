@@ -24,7 +24,7 @@ namespace LogisticBooking.Domain.Commands.Booking
         public List<Persistence.Models.Order> Orders { get; set; }
 
 
-        public CreateBookingCommand(int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email , List<Persistence.Models.Order> orders, Guid transporterId)
+        public CreateBookingCommand( int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email , List<Persistence.Models.Order> orders, Guid transporterId)
         {
             TransporterId = transporterId;
             this.totalPallets = totalPallets;

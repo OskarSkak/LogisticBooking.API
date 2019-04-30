@@ -35,6 +35,8 @@ namespace LogisticBooking.Domain.CommandHandlers
         {
 
             
+            
+            
             if (String.IsNullOrEmpty(cmd.transporterName))
             {
                 var transporter = await _transporterRepository.GetByIdAsync(cmd.TransporterId);
