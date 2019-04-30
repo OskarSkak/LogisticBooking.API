@@ -24,6 +24,7 @@ namespace LogisticBooking.Queries.QueryHandler
             var result = await _bookingRepository.GetAllCustom() as IList<Booking>;
             return result;
         }
+        
 
         public async Task<Booking> HandleAsync(GetBookingById query, CancellationToken ct)
         {

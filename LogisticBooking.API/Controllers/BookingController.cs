@@ -66,6 +66,16 @@ namespace LogisticBooking.API.Controllers
         public async Task<IActionResult> GetBookingById(Guid id)
         {
             var result = await QueryRouter.QueryAsync<GetBookingById, Booking>(new GetBookingById(id));
+            var orders = await QueryRouter.QueryAsync<OrdersQuery, IList<Order>>(new OrdersQuery());
+            var ordersWithBookingId = new List<Order>();
+
+            foreach (var order in orders)
+            {
+                if(order.bookingId == result.internalId) ordersWithBookingId.Add(order);
+            }
+
+            result.Orders = ordersWithBookingId;
+            
             return new ObjectResult(result);
         }
 
