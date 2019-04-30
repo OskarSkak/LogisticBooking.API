@@ -6,6 +6,9 @@ namespace LogisticBooking.API.RequestModels
 {
     public class BookingRequestModel
     {
+        
+        
+        
         public int totalPallets { get; set; }
         public DateTime bookingTime { get; set; }
         public string transporterName { get; set; }
