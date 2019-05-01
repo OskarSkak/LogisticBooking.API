@@ -65,6 +65,7 @@ namespace LogisticBooking.Persistence.BaseRepository
                 conn.Open();
 
                 var result = await conn.GetAsync<T>(id);
+                conn.Close();
                 return result;
 
             }

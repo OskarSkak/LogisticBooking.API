@@ -13,7 +13,7 @@ namespace LogisticBooking.Persistence.Models
         {
             ToTable("Bookings");
             Map(x => x.internalId).ToColumn("Internalid").IsKey();
-            Map(x => x.totalPallets).ToColumn("Pallets");
+            Map(x => x.totalPallets).ToColumn("pallets");
             Map(x => x.bookingTime).ToColumn("BookingTime");
             Map(x => x.transporterName).ToColumn("TransporterName");
             Map(x => x.port).ToColumn("Port");

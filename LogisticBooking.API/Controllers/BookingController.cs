@@ -33,7 +33,7 @@ namespace LogisticBooking.API.Controllers
             Guid LoggedInID = new Guid(loggedIn);
             List<Order> orders = new List<Order>();
 
-            foreach (var order in bookingRequestModel.OrderViewModels)
+            foreach (var order in bookingRequestModel.Orders)
             {
                orders.Add(new Order
                {
@@ -41,7 +41,11 @@ namespace LogisticBooking.API.Controllers
                    customerNumber = order.customerNumber,
                    wareNumber = order.wareNumber,
                    orderNumber = order.orderNumber,
-                   InOut = order.InOut
+                   InOut = order.InOut,
+                   TotalPallets = order.TotalPallets,
+                   ExternalId = order.ExternalId,
+                   Comment = order.Comment,
+                   BottomPallets = order.BottomPallets
                }); 
             }
             

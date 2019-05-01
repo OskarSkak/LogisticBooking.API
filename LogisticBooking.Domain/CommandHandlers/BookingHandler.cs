@@ -75,7 +75,11 @@ namespace LogisticBooking.Domain.CommandHandlers
                     id = Guid.NewGuid(),
                     InOut = order.InOut,
                     orderNumber = order.orderNumber,
-                    wareNumber = order.wareNumber
+                    wareNumber = order.wareNumber,
+                    Comment = order.Comment,
+                    ExternalId = order.ExternalId,
+                    TotalPallets = order.TotalPallets,
+                    BottomPallets = order.TotalPallets
                 });
             }
 
