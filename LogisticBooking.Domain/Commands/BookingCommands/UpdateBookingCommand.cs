@@ -20,6 +20,8 @@ namespace LogisticBooking.Domain.Commands.Booking
             this.ExternalId = ExternalId;
 
         }
+        
+        
 
         public int ExternalId { get; set; }
         public int totalPallets { get; set; }

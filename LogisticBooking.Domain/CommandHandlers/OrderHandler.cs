@@ -57,7 +57,13 @@ namespace LogisticBooking.Domain.CommandHandlers
                 customerNumber = cmd.customerNumber,
                 InOut = cmd.InOut,
                 orderNumber = cmd.orderNumber,
-                wareNumber = cmd.wareNumber
+                wareNumber = cmd.wareNumber,
+                SupplierName = cmd.SupplierName,
+                ExternalId = cmd.ExternalId,
+                Comment = cmd.Comment,
+                TotalPallets = cmd.TotalPallets,
+                BottomPallets = cmd.BottomPallets
+                
             });
             return new IdResponse(cmd.id);
         }

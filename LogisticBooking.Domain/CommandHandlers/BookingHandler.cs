@@ -71,7 +71,7 @@ namespace LogisticBooking.Domain.CommandHandlers
                 orders.Add(new Order
                 {
                     bookingId = cmd.internalId,
-                    customerNumber = order.customerNumber,
+                    customerNumber = 1.ToString(),
                     id = Guid.NewGuid(),
                     InOut = order.InOut,
                     orderNumber = order.orderNumber,
@@ -80,7 +80,7 @@ namespace LogisticBooking.Domain.CommandHandlers
                     ExternalId = order.ExternalId,
                     TotalPallets = order.TotalPallets,
                     BottomPallets = order.TotalPallets,
-                    SupplierName = order.SupplierName
+                    SupplierName = order.SupplierName,
                 });
             }
 

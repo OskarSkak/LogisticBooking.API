@@ -58,11 +58,18 @@ namespace LogisticBooking.API.Controllers
                     orderRequestModel.bookingId = order.bookingId;
                 if (orderRequestModel.wareNumber == 0)
                     orderRequestModel.wareNumber = order.wareNumber;
+                if (String.IsNullOrEmpty(orderRequestModel.ExternalId))
+                    orderRequestModel.ExternalId = order.ExternalId;
+                if (String.IsNullOrEmpty(orderRequestModel.Comment))
+                    orderRequestModel.Comment = order.Comment;
+                if (String.IsNullOrEmpty(orderRequestModel.SupplierName))
+                    orderRequestModel.SupplierName = order.SupplierName;
+                
             }
 
             var result = await CommandRouter.RouteAsync<UpdateOrderCommand, IdResponse>(
             new UpdateOrderCommand(orderRequestModel.bookingId, orderRequestModel.customerNumber, 
-                orderRequestModel.orderNumber, orderRequestModel.wareNumber, orderRequestModel.InOut, id));
+                orderRequestModel.orderNumber, orderRequestModel.wareNumber, orderRequestModel.InOut, id , orderRequestModel.SupplierName , orderRequestModel.ExternalId, orderRequestModel.TotalPallets , orderRequestModel.BottomPallets , orderRequestModel.Comment));
 
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
