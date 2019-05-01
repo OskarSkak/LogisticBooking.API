@@ -29,9 +29,8 @@ namespace LogisticBooking.API.Controllers
         public async Task<IActionResult> CreateNewBooking([FromBody] BookingRequestModel bookingRequestModel)
         {
             
-           // var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
-           // Guid LoggedInID = new Guid(loggedIn);
-          var  LoggedInID = Guid.NewGuid();
+           var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+            Guid LoggedInID = new Guid(loggedIn);
             List<Order> orders = new List<Order>();
 
             foreach (var order in bookingRequestModel.OrderViewModels)
