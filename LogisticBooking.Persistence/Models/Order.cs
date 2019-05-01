@@ -16,6 +16,7 @@ namespace LogisticBooking.Persistence.Models
             Map(x => x.orderNumber).ToColumn("OrderNumber");
             Map(x => x.wareNumber).ToColumn("WareNumber");
             Map(x => x.InOut).ToColumn("InOut");
+            Map(x => x.SupplierName).ToColumn("suppliername");
         }
     }
 
@@ -34,6 +35,8 @@ namespace LogisticBooking.Persistence.Models
         public string orderNumber { get; set; }
         public int wareNumber { get; set; }
         public string InOut { get; set; }
+        
+        public string SupplierName { get; set; }
     }
 }
 

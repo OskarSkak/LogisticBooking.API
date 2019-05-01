@@ -15,5 +15,6 @@ namespace LogisticBooking.API.RequestModels
         public string orderNumber { get; set; }
         public int wareNumber { get; set; }
         public string InOut { get; set; }
+        public string SupplierName { get; set; }
     }
 }

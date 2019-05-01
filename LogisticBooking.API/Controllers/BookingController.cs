@@ -45,7 +45,8 @@ namespace LogisticBooking.API.Controllers
                    TotalPallets = order.TotalPallets,
                    ExternalId = order.ExternalId,
                    Comment = order.Comment,
-                   BottomPallets = order.BottomPallets
+                   BottomPallets = order.BottomPallets,
+                   SupplierName = order.SupplierName
                }); 
             }
             

@@ -79,7 +79,8 @@ namespace LogisticBooking.Domain.CommandHandlers
                     Comment = order.Comment,
                     ExternalId = order.ExternalId,
                     TotalPallets = order.TotalPallets,
-                    BottomPallets = order.TotalPallets
+                    BottomPallets = order.TotalPallets,
+                    SupplierName = order.SupplierName
                 });
             }
 
