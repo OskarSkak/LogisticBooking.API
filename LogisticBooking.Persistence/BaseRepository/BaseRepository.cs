@@ -10,24 +10,33 @@ namespace LogisticBooking.Persistence.BaseRepository
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
+        
+        
+        //************************** PROPERTIES ******************************************
         private readonly IConnectionString _connectionString;
+        
+        
+        
+        
+        //*************************** CONSTRUCTOR ****************************************
 
         public BaseRepository(IConnectionString connectionString)
         {
             _connectionString = connectionString;
         }
 
+        
+        
+        //**************************** METHODS *********************************************
 
         public async Task<object> InsertAsync(T value)
         {
             using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
-
-
-                var a = await conn.InsertAsync(value);
-                
-                return a;
+                var result = await conn.InsertAsync(value);
+                conn.Close();
+                return result;
             }
         }
 
@@ -37,10 +46,9 @@ namespace LogisticBooking.Persistence.BaseRepository
             using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
-
-                
-                var a = await conn.InsertAsync(valueList);
-                return a;
+                var result= await conn.InsertAsync(valueList);
+                conn.Close();
+                return result;
             }
         }
     //***********************UPDATE ***************************
@@ -50,8 +58,9 @@ namespace LogisticBooking.Persistence.BaseRepository
             using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
-
-                return await conn.UpdateAsync(value);
+                var result = await conn.UpdateAsync(value);
+                conn.Close();
+                return result;
             }
         }
     //***********************GET ***************************
@@ -63,7 +72,6 @@ namespace LogisticBooking.Persistence.BaseRepository
             using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
-
                 var result = await conn.GetAsync<T>(id);
                 conn.Close();
                 return result;
@@ -76,8 +84,9 @@ namespace LogisticBooking.Persistence.BaseRepository
             using (var conn = new NpgsqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
-
-                return await conn.GetAllAsync<T>();
+                var result =   await conn.GetAllAsync<T>();
+                conn.Close();
+                return result;
             }
         }
 
@@ -96,6 +105,7 @@ namespace LogisticBooking.Persistence.BaseRepository
                 conn.Open();
 
                 var result = await conn.DeleteAsync(value);
+                conn.Close();
                 return result;
             }
         }
