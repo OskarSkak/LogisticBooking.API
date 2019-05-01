@@ -53,7 +53,7 @@ namespace LogisticBooking.API.Controllers
             var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
                 new CreateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
                     bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
-                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID, bookingRequestModel.ExternalId ));
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID, bookingRequestModel.ExternalId , LoggedInID ));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
