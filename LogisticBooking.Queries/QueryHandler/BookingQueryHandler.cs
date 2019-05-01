@@ -14,7 +14,7 @@ namespace LogisticBooking.Queries.QueryHandler
     {
         private readonly IBookingRepository _bookingRepository;
 
-        public BookingQueryHandler(IBookingRepository bookingRepository)
+        public BookingQueryHandler(IBookingRepository bookingRepository , IOrderRepository orderRepository)
         {
             _bookingRepository = bookingRepository;
         }

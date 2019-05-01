@@ -37,10 +37,10 @@ namespace LogisticBooking.API.Controllers
             {
                orders.Add(new Order
                {
-                   bookingId = order.bookingId,
-                   customerNumber = order.customerNumber,
-                   wareNumber = order.wareNumber,
-                   orderNumber = order.orderNumber,
+                   BookingId = order.bookingId,
+                   CustomerNumber = order.customerNumber,
+                   WareNumber = order.wareNumber,
+                   OrderNumber = order.orderNumber,
                    InOut = order.InOut,
                    TotalPallets = order.TotalPallets,
                    ExternalId = order.ExternalId,
@@ -74,7 +74,7 @@ namespace LogisticBooking.API.Controllers
 
             foreach (var order in orders)
             {
-                if(order.bookingId == result.internalId) ordersWithBookingId.Add(order);
+                if(order.BookingId == result.InternalId) ordersWithBookingId.Add(order);
             }
 
             result.Orders = ordersWithBookingId;
@@ -99,21 +99,21 @@ namespace LogisticBooking.API.Controllers
             if (booking != null)
             {
                 if (bookingRequestModel.totalPallets == 0)
-                    bookingRequestModel.totalPallets = booking.totalPallets;
+                    bookingRequestModel.totalPallets = booking.TotalPallets;
                 if (DateTimeEmpty(bookingRequestModel.bookingTime))
-                    bookingRequestModel.bookingTime = booking.bookingTime;
+                    bookingRequestModel.bookingTime = booking.BookingTime;
                 if (String.IsNullOrEmpty(bookingRequestModel.transporterName))
-                    bookingRequestModel.transporterName = booking.transporterName;
+                    bookingRequestModel.transporterName = booking.TransporterName;
                 if (bookingRequestModel.port == 0)
-                    bookingRequestModel.port = booking.port;
+                    bookingRequestModel.port = booking.Port;
                 if (DateTimeEmpty(bookingRequestModel.actualArrival))
-                    bookingRequestModel.actualArrival = booking.actualArrival;
+                    bookingRequestModel.actualArrival = booking.ActualArrival;
                 if (DateTimeEmpty(bookingRequestModel.startLoading))
-                    bookingRequestModel.startLoading = booking.startLoading;
+                    bookingRequestModel.startLoading = booking.StartLoading;
                 if (DateTimeEmpty(bookingRequestModel.endLoading))
-                    bookingRequestModel.endLoading = booking.endLoading;
+                    bookingRequestModel.endLoading = booking.EndLoading;
                 if (String.IsNullOrEmpty(bookingRequestModel.email))
-                    bookingRequestModel.email = booking.email;
+                    bookingRequestModel.email = booking.Email;
                 if (bookingRequestModel.ExternalId == 0)
                 {
                     bookingRequestModel.ExternalId = booking.ExternalId; 

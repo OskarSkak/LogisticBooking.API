@@ -51,12 +51,12 @@ namespace LogisticBooking.Persistence.Repositories
                 {
                     Booking bookingEntry;
 
-                    if (!dictionary.TryGetValue(booking.internalId, out bookingEntry))
+                    if (!dictionary.TryGetValue(booking.InternalId, out bookingEntry))
                     {
                         bookingEntry = booking;
                         bookingEntry.Orders = new List<Order>();
                         
-                        dictionary.Add(bookingEntry.internalId , bookingEntry);
+                        dictionary.Add(bookingEntry.InternalId , bookingEntry);
                         
                     }
                     

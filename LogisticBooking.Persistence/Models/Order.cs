@@ -10,11 +10,11 @@ namespace LogisticBooking.Persistence.Models
         public OrderMap()
         {
             ToTable("orders");
-            Map(x => x.id).ToColumn("Id").IsKey();
-            Map(x => x.bookingId).ToColumn("BookingId");
-            Map(x => x.customerNumber).ToColumn("CustomerNumber");
-            Map(x => x.orderNumber).ToColumn("OrderNumber");
-            Map(x => x.wareNumber).ToColumn("WareNumber");
+            Map(x => x.Id).ToColumn("Id").IsKey();
+            Map(x => x.BookingId).ToColumn("BookingId");
+            Map(x => x.CustomerNumber).ToColumn("CustomerNumber");
+            Map(x => x.OrderNumber).ToColumn("OrderNumber");
+            Map(x => x.WareNumber).ToColumn("WareNumber");
             Map(x => x.InOut).ToColumn("InOut");
             Map(x => x.SupplierName).ToColumn("suppliername");
         }
@@ -22,7 +22,7 @@ namespace LogisticBooking.Persistence.Models
 
     public class Order
     {
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
         
         public string Comment { get; set; }
         
@@ -30,10 +30,10 @@ namespace LogisticBooking.Persistence.Models
         public int BottomPallets { get; set; }
         public string ExternalId { get; set; }
         
-        public Guid bookingId { get; set; }
-        public string customerNumber { get; set; }
-        public string orderNumber { get; set; }
-        public int wareNumber { get; set; }
+        public Guid BookingId { get; set; }
+        public string CustomerNumber { get; set; }
+        public string OrderNumber { get; set; }
+        public int WareNumber { get; set; }
         public string InOut { get; set; }
         
         public string SupplierName { get; set; }

@@ -7,20 +7,22 @@ using Dapper.FluentMap.Dommel.Mapping;
 
 namespace LogisticBooking.Persistence.Models
 {
+    
+    
     public class BookingMap : DommelEntityMap<Booking>
     {
         public BookingMap()
         {
             ToTable("Bookings");
-            Map(x => x.internalId).ToColumn("Internalid").IsKey();
-            Map(x => x.totalPallets).ToColumn("pallets");
-            Map(x => x.bookingTime).ToColumn("BookingTime");
-            Map(x => x.transporterName).ToColumn("TransporterName");
-            Map(x => x.port).ToColumn("Port");
-            Map(x => x.actualArrival).ToColumn("ActualArrival");
-            Map(x => x.startLoading).ToColumn("StartLoading");
-            Map(x => x.endLoading).ToColumn("EndLoading");
-            Map(x => x.email).ToColumn("Email");
+            Map(x => x.InternalId).ToColumn("Internalid").IsKey();
+            Map(x => x.TotalPallets).ToColumn("pallets");
+            Map(x => x.BookingTime).ToColumn("BookingTime");
+            Map(x => x.TransporterName).ToColumn("TransporterName");
+            Map(x => x.Port).ToColumn("Port");
+            Map(x => x.ActualArrival).ToColumn("ActualArrival");
+            Map(x => x.StartLoading).ToColumn("StartLoading");
+            Map(x => x.EndLoading).ToColumn("EndLoading");
+            Map(x => x.Email).ToColumn("Email");
             Map(x => x.Orders).Ignore();
             Map(x => x.ExternalId).ToColumn("externalid");
             
@@ -35,16 +37,18 @@ namespace LogisticBooking.Persistence.Models
         
     public int ExternalId { get; set; }
         
-    public int totalPallets { get; set; }
-    public DateTime bookingTime { get; set; }
-    public string transporterName { get; set; }
-    public int port { get; set; }
-    public DateTime actualArrival { get; set; }
-    public DateTime startLoading { get; set; }
-    public DateTime endLoading { get; set; }
+    public int TotalPallets { get; set; }
+    public DateTime BookingTime { get; set; }
+    
+    public string TransporterName { get; set; }
+    public int Port { get; set; }
+    public DateTime ActualArrival { get; set; }
+    public DateTime StartLoading { get; set; }
+    public DateTime EndLoading { get; set; }
 
-    [ForeignKey("bookingid")] public Guid internalId { get; set; }
-    public string email { get; set; }
+    [ForeignKey("bookingid")] 
+    public Guid InternalId { get; set; }
+    public string Email { get; set; }
 
     public List<Order> Orders { get; set; }
 

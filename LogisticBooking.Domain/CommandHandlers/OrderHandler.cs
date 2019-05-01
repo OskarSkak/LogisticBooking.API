@@ -31,12 +31,12 @@ namespace LogisticBooking.Domain.CommandHandlers
         {
             var result = await _orderRepository.InsertAsync(new Order
             {
-                id = cmd.id,
-                bookingId = cmd.bookingId,
-                customerNumber = cmd.customerNumber,
+                Id = cmd.id,
+                BookingId = cmd.bookingId,
+                CustomerNumber = cmd.customerNumber,
                 InOut = cmd.InOut,
-                orderNumber = cmd.orderNumber,
-                wareNumber = cmd.wareNumber
+                OrderNumber = cmd.orderNumber,
+                WareNumber = cmd.wareNumber
             });
             return new IdResponse(cmd.id);
         }
@@ -52,12 +52,12 @@ namespace LogisticBooking.Domain.CommandHandlers
         {
             var result = await _orderRepository.UpdateAsync(new Order
             {
-                id = cmd.id,
-                bookingId = cmd.bookingId,
-                customerNumber = cmd.customerNumber,
+                Id = cmd.id,
+                BookingId = cmd.bookingId,
+                CustomerNumber = cmd.customerNumber,
                 InOut = cmd.InOut,
-                orderNumber = cmd.orderNumber,
-                wareNumber = cmd.wareNumber,
+                OrderNumber = cmd.orderNumber,
+                WareNumber = cmd.wareNumber,
                 SupplierName = cmd.SupplierName,
                 ExternalId = cmd.ExternalId,
                 Comment = cmd.Comment,

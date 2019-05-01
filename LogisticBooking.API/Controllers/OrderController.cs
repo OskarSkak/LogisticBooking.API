@@ -49,15 +49,15 @@ namespace LogisticBooking.API.Controllers
             if (order != null)
             {
                 if (String.IsNullOrEmpty(orderRequestModel.customerNumber))
-                    orderRequestModel.customerNumber = order.customerNumber;
+                    orderRequestModel.customerNumber = order.CustomerNumber;
                 if (String.IsNullOrEmpty(orderRequestModel.orderNumber))
-                    orderRequestModel.orderNumber = order.orderNumber;
+                    orderRequestModel.orderNumber = order.OrderNumber;
                 if (String.IsNullOrEmpty(orderRequestModel.InOut))
                     orderRequestModel.InOut = order.InOut;
                 if (orderRequestModel.bookingId == Guid.Empty)
-                    orderRequestModel.bookingId = order.bookingId;
+                    orderRequestModel.bookingId = order.BookingId;
                 if (orderRequestModel.wareNumber == 0)
-                    orderRequestModel.wareNumber = order.wareNumber;
+                    orderRequestModel.wareNumber = order.WareNumber;
                 if (String.IsNullOrEmpty(orderRequestModel.ExternalId))
                     orderRequestModel.ExternalId = order.ExternalId;
                 if (String.IsNullOrEmpty(orderRequestModel.Comment))
