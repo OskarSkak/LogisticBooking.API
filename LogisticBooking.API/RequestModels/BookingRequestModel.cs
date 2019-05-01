@@ -6,6 +6,9 @@ namespace LogisticBooking.API.RequestModels
 {
     public class BookingRequestModel
     {
+        
+        
+        public int ExternalId { get; set; }
         public int totalPallets { get; set; }
         public DateTime bookingTime { get; set; }
         public string transporterName { get; set; }
@@ -15,6 +18,6 @@ namespace LogisticBooking.API.RequestModels
         public DateTime endLoading { get; set; }
         public string email { get; set; }
         
-        public List<OrderRequestModel> OrderViewModels { get; set; }
+        public List<OrderRequestModel> Orders { get; set; }
     }
 }

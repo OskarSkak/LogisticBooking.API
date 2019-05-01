@@ -14,7 +14,7 @@ namespace LogisticBooking.Queries.QueryHandler
     {
         private readonly IBookingRepository _bookingRepository;
 
-        public BookingQueryHandler(IBookingRepository bookingRepository)
+        public BookingQueryHandler(IBookingRepository bookingRepository , IOrderRepository orderRepository)
         {
             _bookingRepository = bookingRepository;
         }
@@ -24,6 +24,7 @@ namespace LogisticBooking.Queries.QueryHandler
             var result = await _bookingRepository.GetAllCustom() as IList<Booking>;
             return result;
         }
+        
 
         public async Task<Booking> HandleAsync(GetBookingById query, CancellationToken ct)
         {

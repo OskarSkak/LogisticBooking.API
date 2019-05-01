@@ -26,31 +26,34 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateNewBooking([FromBody] BookingRequestModel bookingRequestModel)
         {
             
-            var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
+           var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
             Guid LoggedInID = new Guid(loggedIn);
-            
             List<Order> orders = new List<Order>();
 
-            foreach (var order in bookingRequestModel.OrderViewModels)
+            foreach (var order in bookingRequestModel.Orders)
             {
                orders.Add(new Order
                {
-                   bookingId = order.bookingId,
-                   customerNumber = order.customerNumber,
-                   wareNumber = order.wareNumber,
-                   orderNumber = order.orderNumber,
-                   InOut = order.InOut
+                   BookingId = order.bookingId,
+                   CustomerNumber = order.customerNumber,
+                   WareNumber = order.wareNumber,
+                   OrderNumber = order.orderNumber,
+                   InOut = order.InOut,
+                   TotalPallets = order.TotalPallets,
+                   ExternalId = order.ExternalId,
+                   Comment = order.Comment,
+                   BottomPallets = order.BottomPallets,
+                   SupplierName = order.SupplierName
                }); 
             }
             
             var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
                 new CreateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
                     bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
-                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID ));
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID, bookingRequestModel.ExternalId , LoggedInID ));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 
@@ -66,6 +69,16 @@ namespace LogisticBooking.API.Controllers
         public async Task<IActionResult> GetBookingById(Guid id)
         {
             var result = await QueryRouter.QueryAsync<GetBookingById, Booking>(new GetBookingById(id));
+            var orders = await QueryRouter.QueryAsync<OrdersQuery, IList<Order>>(new OrdersQuery());
+            var ordersWithBookingId = new List<Order>();
+
+            foreach (var order in orders)
+            {
+                if(order.BookingId == result.InternalId) ordersWithBookingId.Add(order);
+            }
+
+            result.Orders = ordersWithBookingId;
+            
             return new ObjectResult(result);
         }
 
@@ -86,27 +99,31 @@ namespace LogisticBooking.API.Controllers
             if (booking != null)
             {
                 if (bookingRequestModel.totalPallets == 0)
-                    bookingRequestModel.totalPallets = booking.totalPallets;
+                    bookingRequestModel.totalPallets = booking.TotalPallets;
                 if (DateTimeEmpty(bookingRequestModel.bookingTime))
-                    bookingRequestModel.bookingTime = booking.bookingTime;
+                    bookingRequestModel.bookingTime = booking.BookingTime;
                 if (String.IsNullOrEmpty(bookingRequestModel.transporterName))
-                    bookingRequestModel.transporterName = booking.transporterName;
+                    bookingRequestModel.transporterName = booking.TransporterName;
                 if (bookingRequestModel.port == 0)
-                    bookingRequestModel.port = booking.port;
+                    bookingRequestModel.port = booking.Port;
                 if (DateTimeEmpty(bookingRequestModel.actualArrival))
-                    bookingRequestModel.actualArrival = booking.actualArrival;
+                    bookingRequestModel.actualArrival = booking.ActualArrival;
                 if (DateTimeEmpty(bookingRequestModel.startLoading))
-                    bookingRequestModel.startLoading = booking.startLoading;
+                    bookingRequestModel.startLoading = booking.StartLoading;
                 if (DateTimeEmpty(bookingRequestModel.endLoading))
-                    bookingRequestModel.endLoading = booking.endLoading;
+                    bookingRequestModel.endLoading = booking.EndLoading;
                 if (String.IsNullOrEmpty(bookingRequestModel.email))
-                    bookingRequestModel.email = booking.email;
+                    bookingRequestModel.email = booking.Email;
+                if (bookingRequestModel.ExternalId == 0)
+                {
+                    bookingRequestModel.ExternalId = booking.ExternalId; 
+                }
             }
 
             var result = await CommandRouter.RouteAsync<UpdateBookingCommand, IdResponse>(
                 new UpdateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
                     bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
-                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email, id));
+                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email, id , bookingRequestModel.ExternalId));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 

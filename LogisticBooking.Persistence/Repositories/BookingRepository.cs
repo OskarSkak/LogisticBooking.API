@@ -24,6 +24,19 @@ namespace LogisticBooking.Persistence.Repositories
             _connectionString = connectionString;
         }
 
+        public async Task<object> GetByIdCustom(Guid guid)
+        {
+            using (var conn = new Npgsql.NpgsqlConnection(_connectionString.ConnectionString))
+            {
+                conn.Open();
+                var dictionary = new Dictionary<Guid, Booking>();
+
+                string sql = "SELECT * from bookings WHERE id = '" + guid + "'";
+                var booking = conn.Query(sql);
+                return booking;
+            }
+        }
+
         public async Task<object> GetAllCustom()
         {
 
@@ -36,25 +49,21 @@ namespace LogisticBooking.Persistence.Repositories
                 
                 var list = conn.Query<Booking, Order, Booking>(sql, (booking, order ) =>
                 {
-                   
-                    
                     Booking bookingEntry;
 
-                    if (!dictionary.TryGetValue(booking.internalId, out bookingEntry))
+                    if (!dictionary.TryGetValue(booking.InternalId, out bookingEntry))
                     {
                         bookingEntry = booking;
                         bookingEntry.Orders = new List<Order>();
                         
-                        dictionary.Add(bookingEntry.internalId , bookingEntry);
+                        dictionary.Add(bookingEntry.InternalId , bookingEntry);
                         
                     }
                     
                     bookingEntry.Orders.Add(order);
                     
                     return bookingEntry;
-                    
-                   
-                }).Distinct()
+                 }).Distinct()
                     .ToList();
 
                 

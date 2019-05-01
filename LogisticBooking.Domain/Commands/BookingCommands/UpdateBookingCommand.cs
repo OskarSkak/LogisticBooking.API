@@ -6,7 +6,7 @@ namespace LogisticBooking.Domain.Commands.Booking
 {
     public class UpdateBookingCommand : Command<IdResponse>
     {
-        public UpdateBookingCommand(int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email, Guid internalId)
+        public UpdateBookingCommand(int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email, Guid internalId  , int ExternalId )
         {
             this.totalPallets = totalPallets;
             this.bookingTime = bookingTime;
@@ -17,8 +17,13 @@ namespace LogisticBooking.Domain.Commands.Booking
             this.endLoading = endLoading;
             this.email = email;
             this.internalId = internalId;
-        }
+            this.ExternalId = ExternalId;
 
+        }
+        
+        
+
+        public int ExternalId { get; set; }
         public int totalPallets { get; set; }
         public DateTime bookingTime { get; set; }
         public string transporterName { get; set; }

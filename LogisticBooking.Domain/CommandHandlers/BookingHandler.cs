@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
@@ -9,7 +8,6 @@ using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
 using LogisticBooking.Persistence.Repositories;
 using SimpleSoft.Mediator;
-using StructureMap.Building;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
@@ -18,11 +16,18 @@ namespace LogisticBooking.Domain.CommandHandlers
         ICommandHandler<UpdateBookingCommand, IdResponse>
 
     {
+        
+        //************************** PROPERTIES ******************************************
+        
         private readonly IEventRouter _eventRouter;
         private readonly IOrderRepository _orderRepository;
         private readonly ITransporterRepository _transporterRepository;
         private readonly IBookingRepository _bookingRepository;
 
+        
+        
+        //*************************** CONSTRUCTOR ****************************************
+        
         public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter , IOrderRepository orderRepository , ITransporterRepository transporterRepository)
         {
             _bookingRepository = bookingRepository;
@@ -31,14 +36,17 @@ namespace LogisticBooking.Domain.CommandHandlers
             _transporterRepository = transporterRepository;
         }
         
+        
+        
+        //*************************** METHODS ****************************************
+        
         public async Task<IdResponse> HandleAsync(CreateBookingCommand cmd, CancellationToken ct)
         {
-
-            
             if (String.IsNullOrEmpty(cmd.transporterName))
             {
                 var transporter = await _transporterRepository.GetByIdAsync(cmd.TransporterId);
                 cmd.transporterName = transporter.Name;
+                cmd.email = transporter.Email;
             }
 
           
@@ -46,16 +54,18 @@ namespace LogisticBooking.Domain.CommandHandlers
             var result = await _bookingRepository.InsertAsync(new Booking
             {
                 
-                internalId = cmd.internalId,
-                email = cmd.email,
-                endLoading = cmd.endLoading,
-                startLoading = cmd.startLoading,
-                totalPallets = cmd.totalPallets,
-                actualArrival = cmd.actualArrival,
-                transporterName = cmd.transporterName,
-                bookingTime = cmd.bookingTime,
-                port = cmd.port,
-                TransporterId = cmd.TransporterId
+                InternalId = cmd.internalId,
+                Email = cmd.email,
+                EndLoading = cmd.endLoading,
+                StartLoading = cmd.startLoading,
+                TotalPallets = cmd.totalPallets,
+                ActualArrival = cmd.actualArrival,
+                TransporterName = cmd.transporterName,
+                BookingTime = cmd.bookingTime,
+                Port = cmd.port,
+                TransporterId = cmd.TransporterId,
+                ExternalId = cmd.ExternalId
+               
                 
             });
   
@@ -67,12 +77,18 @@ namespace LogisticBooking.Domain.CommandHandlers
                 
                 orders.Add(new Order
                 {
-                    bookingId = cmd.internalId,
-                    customerNumber = order.customerNumber,
-                    id = Guid.NewGuid(),
+                    BookingId = cmd.internalId,
+                    CustomerNumber = 1.ToString(),
+                    Id = Guid.NewGuid(),
                     InOut = order.InOut,
-                    orderNumber = order.orderNumber,
-                    wareNumber = order.wareNumber
+                    OrderNumber = order.OrderNumber,
+                    WareNumber = order.WareNumber,
+                    Comment = order.Comment,
+                    ExternalId = order.ExternalId,
+                    TotalPallets = order.TotalPallets,
+                    BottomPallets = order.TotalPallets,
+                    SupplierName = order.SupplierName
+                    
                 });
             }
 
@@ -95,15 +111,16 @@ namespace LogisticBooking.Domain.CommandHandlers
         {
             var result = await _bookingRepository.UpdateAsync(new Booking
             {
-                email = cmd.email,
-                actualArrival = cmd.actualArrival,
-                bookingTime = cmd.bookingTime,
-                endLoading = cmd.endLoading,
-                port = cmd.port,
-                internalId = cmd.internalId,
-                startLoading = cmd.startLoading,
-                totalPallets = cmd.totalPallets,
-                transporterName = cmd.transporterName
+                Email = cmd.email,
+                ActualArrival = cmd.actualArrival,
+                BookingTime = cmd.bookingTime,
+                EndLoading = cmd.endLoading,
+                Port = cmd.port,
+                InternalId = cmd.internalId,
+                StartLoading = cmd.startLoading,
+                TotalPallets = cmd.totalPallets,
+                TransporterName = cmd.transporterName,
+                ExternalId = cmd.ExternalId
             });
             return new IdResponse(cmd.Id);
         }

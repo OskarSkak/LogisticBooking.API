@@ -49,20 +49,27 @@ namespace LogisticBooking.API.Controllers
             if (order != null)
             {
                 if (String.IsNullOrEmpty(orderRequestModel.customerNumber))
-                    orderRequestModel.customerNumber = order.customerNumber;
+                    orderRequestModel.customerNumber = order.CustomerNumber;
                 if (String.IsNullOrEmpty(orderRequestModel.orderNumber))
-                    orderRequestModel.orderNumber = order.orderNumber;
+                    orderRequestModel.orderNumber = order.OrderNumber;
                 if (String.IsNullOrEmpty(orderRequestModel.InOut))
                     orderRequestModel.InOut = order.InOut;
                 if (orderRequestModel.bookingId == Guid.Empty)
-                    orderRequestModel.bookingId = order.bookingId;
+                    orderRequestModel.bookingId = order.BookingId;
                 if (orderRequestModel.wareNumber == 0)
-                    orderRequestModel.wareNumber = order.wareNumber;
+                    orderRequestModel.wareNumber = order.WareNumber;
+                if (String.IsNullOrEmpty(orderRequestModel.ExternalId))
+                    orderRequestModel.ExternalId = order.ExternalId;
+                if (String.IsNullOrEmpty(orderRequestModel.Comment))
+                    orderRequestModel.Comment = order.Comment;
+                if (String.IsNullOrEmpty(orderRequestModel.SupplierName))
+                    orderRequestModel.SupplierName = order.SupplierName;
+                
             }
 
             var result = await CommandRouter.RouteAsync<UpdateOrderCommand, IdResponse>(
             new UpdateOrderCommand(orderRequestModel.bookingId, orderRequestModel.customerNumber, 
-                orderRequestModel.orderNumber, orderRequestModel.wareNumber, orderRequestModel.InOut, id));
+                orderRequestModel.orderNumber, orderRequestModel.wareNumber, orderRequestModel.InOut, id , orderRequestModel.SupplierName , orderRequestModel.ExternalId, orderRequestModel.TotalPallets , orderRequestModel.BottomPallets , orderRequestModel.Comment));
 
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
