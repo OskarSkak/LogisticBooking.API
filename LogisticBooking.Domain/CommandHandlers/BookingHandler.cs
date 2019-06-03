@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
@@ -17,19 +18,21 @@ namespace LogisticBooking.Domain.CommandHandlers
 
     {
         
+
         //************************** PROPERTIES ******************************************
         
         private readonly IEventRouter _eventRouter;
         private readonly IOrderRepository _orderRepository;
         private readonly ITransporterRepository _transporterRepository;
         private readonly IBookingRepository _bookingRepository;
-
+        private readonly IUtilBookingRepository _utilBookingRepository;
         
         
         //*************************** CONSTRUCTOR ****************************************
         
-        public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter , IOrderRepository orderRepository , ITransporterRepository transporterRepository)
+        public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter , IOrderRepository orderRepository , ITransporterRepository transporterRepository , IUtilBookingRepository utilBookingRepository)
         {
+            _utilBookingRepository = utilBookingRepository;
             _bookingRepository = bookingRepository;
             _eventRouter = eventRouter;
             _orderRepository = orderRepository;
@@ -56,10 +59,10 @@ namespace LogisticBooking.Domain.CommandHandlers
                 
                 InternalId = cmd.internalId,
                 Email = cmd.email,
-                EndLoading = cmd.endLoading,
-                StartLoading = cmd.startLoading,
+                EndLoading = DateTime.Now,
+                StartLoading = DateTime.Now,
                 TotalPallets = cmd.totalPallets,
-                ActualArrival = cmd.actualArrival,
+                ActualArrival = DateTime.Now,
                 TransporterName = cmd.transporterName,
                 BookingTime = cmd.bookingTime,
                 Port = cmd.port,
@@ -96,6 +99,12 @@ namespace LogisticBooking.Domain.CommandHandlers
             {
                await _orderRepository.InsertAsync(order);
             }
+
+            var utilList = await _utilBookingRepository.GetAllAsync();
+
+            var bookingid = utilList.FirstOrDefault();
+            
+            var updateRequest = await _utilBookingRepository.UpdateUtil(bookingid);
 
             return new IdResponse(cmd.Id);
         }

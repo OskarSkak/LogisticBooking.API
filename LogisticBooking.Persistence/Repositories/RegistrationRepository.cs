@@ -11,9 +11,9 @@ namespace LogisticBooking.Persistence.Repositories
     }
 
 
-    public class RegistrationRepository : BaseSqlRepository<RegistrationKey>, IRegistrationRepository
+    public class RegistrationRepository : BaseBackendSql<RegistrationKey>, IRegistrationRepository
     {
-        public RegistrationRepository(ISqlConnectionString connectionString) : base(connectionString)
+        public RegistrationRepository(ISqlBackendConnectionString connectionString) : base(connectionString)
         {
             
         }
