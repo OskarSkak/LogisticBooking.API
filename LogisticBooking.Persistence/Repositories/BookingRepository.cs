@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -10,23 +11,23 @@ using LogisticBooking.Persistence.Models;
 
 namespace LogisticBooking.Persistence.Repositories
 {
-    public interface IBookingRepository : IBaseRepository<Booking>
+    public interface IBookingRepository : IBaseSqlRepository<Booking>
     {
         Task<object> GetAllCustom();
     }
     
-    public class BookingRepository : BaseRepository<Booking>, IBookingRepository
+    public class BookingRepository : BaseBackendSql<Booking>, IBookingRepository
     {
-        private readonly IConnectionString _connectionString;
+        private readonly ISqlBackendConnectionString _connectionString;
 
-        public BookingRepository(IConnectionString connectionString) : base(connectionString)
+        public BookingRepository(ISqlBackendConnectionString connectionString) : base(connectionString)
         {
             _connectionString = connectionString;
         }
 
         public async Task<object> GetByIdCustom(Guid guid)
         {
-            using (var conn = new Npgsql.NpgsqlConnection(_connectionString.ConnectionString))
+            using (var conn = new SqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
                 var dictionary = new Dictionary<Guid, Booking>();
@@ -40,7 +41,7 @@ namespace LogisticBooking.Persistence.Repositories
         public async Task<object> GetAllCustom()
         {
 
-            using (var conn = new Npgsql.NpgsqlConnection(_connectionString.ConnectionString))
+            using (var conn = new SqlConnection(_connectionString.ConnectionString))
             {
                 conn.Open();
                 var dictionary = new Dictionary<Guid, Booking>();

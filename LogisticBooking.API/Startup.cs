@@ -85,6 +85,11 @@ namespace LogisticBooking.API
             });
             
             
+            var connectionString =
+                "Server=tcp:logistictechnologies.database.windows.net,1433;Initial Catalog=test;Persist Security Info=False;User ID=LG_admin;Password=Hjallesevej50;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+           // services.AddDbContext<UtilityContext>(o => o.UseSqlServer(connectionString));
+
+            
             // Add webRigistry
             
             var container = new Container(new WebRegistry.WebRegistry());

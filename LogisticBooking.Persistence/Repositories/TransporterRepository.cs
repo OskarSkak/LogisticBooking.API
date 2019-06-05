@@ -9,9 +9,9 @@ namespace LogisticBooking.Persistence.Repositories
 
     }
 
-    public class TransporterRepository : BaseRepository<Transporter>, ITransporterRepository
+    public class TransporterRepository : BaseBackendSql<Transporter>, ITransporterRepository
     {
-        public TransporterRepository(IConnectionString connectionString): base(connectionString)
+        public TransporterRepository(ISqlBackendConnectionString connectionString): base(connectionString)
         {
 
         }

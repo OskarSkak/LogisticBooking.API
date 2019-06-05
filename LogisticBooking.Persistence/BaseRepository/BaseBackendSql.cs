@@ -7,15 +7,21 @@ using LogisticBooking.Persistence.ConnectionStrings;
 
 namespace LogisticBooking.Persistence.BaseRepository
 {
-    public class BaseSqlRepository<T> : IBaseSqlRepository<T> where T : class
+    public class BaseBackendSql<T> : IBaseRepository<T> where T : class
     {
-        private readonly ISqlConnectionString _connectionString;
+         
+        //************************** PROPERTIES ******************************************
+        private readonly ISqlBackendConnectionString _connectionString;
+        
+        
+        
+        
+        //*************************** CONSTRUCTOR ****************************************
 
-        public BaseSqlRepository(ISqlConnectionString connectionString)
+        public BaseBackendSql(ISqlBackendConnectionString connectionString)
         {
             _connectionString = connectionString;
         }
-        
         
         
         
@@ -90,5 +96,6 @@ namespace LogisticBooking.Persistence.BaseRepository
                 return result;
             }
         }
+
     }
 }

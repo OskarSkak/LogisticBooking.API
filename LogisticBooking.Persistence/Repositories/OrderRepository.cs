@@ -5,15 +5,15 @@ using LogisticBooking.Persistence.Models;
 namespace LogisticBooking.Persistence.Repositories
 {
 
-    public interface IOrderRepository : IBaseRepository<Order>
+    public interface IOrderRepository : IBaseSqlRepository<Order>
     {
         
     }
     
-    public class OrderRepository : BaseRepository<Order> , IOrderRepository
+    public class OrderRepository : BaseBackendSql<Order> , IOrderRepository
     {
         
-        public OrderRepository(IConnectionString connectionString) : base(connectionString)
+        public OrderRepository(ISqlBackendConnectionString connectionString) : base(connectionString)
         {
             
         }

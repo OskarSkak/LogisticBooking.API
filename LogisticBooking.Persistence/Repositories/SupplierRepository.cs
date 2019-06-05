@@ -4,14 +4,14 @@ using LogisticBooking.Persistence.Models;
 
 namespace LogisticBooking.Persistence.Repositories
 {
-    public interface ISupplierRepository : IBaseRepository<Supplier>
+    public interface ISupplierRepository : IBaseSqlRepository<Supplier>
     {
 
     }
 
-    public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
+    public class SupplierRepository : BaseBackendSql<Supplier>, ISupplierRepository
     {
-        public SupplierRepository(IConnectionString connectionString): base(connectionString)
+        public SupplierRepository(ISqlBackendConnectionString connectionString): base(connectionString)
         {
 
         }
