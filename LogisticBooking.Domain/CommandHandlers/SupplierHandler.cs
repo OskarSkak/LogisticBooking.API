@@ -3,10 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
 using LogisticBooking.Domain.Commands;
-using LogisticBooking.Events.Events;
+
 using LogisticBooking.Infrastructure.MessagingContracts;
+using LogisticBooking.Persistence;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
+
 using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
@@ -25,7 +26,7 @@ namespace LogisticBooking.Domain.CommandHandlers
 
         public async Task<IdResponse> HandleAsync(CreateSupplierCommand cmd, CancellationToken ct)
         {
-            var result = await _supplierRepository.InsertAsync(new Supplier
+            var result = _supplierRepository.Insert(new Supplier
             {
                 ID = cmd.ID,
                 Name = cmd.Name,
@@ -43,16 +44,16 @@ namespace LogisticBooking.Domain.CommandHandlers
                 return IdResponse.Unsuccessful("Id is empty");
             }
 
-            var supplier = await _supplierRepository.GetByIdAsync(cmd.id);
+            var supplier =  _supplierRepository.GetById(cmd.id);
 
-            var result = await _supplierRepository.DeleteByTAsync(supplier);
+            var result =  _supplierRepository.DeleteByT(supplier);
             
             return new IdResponse(cmd.Id);
         }
 
         public async Task<IdResponse> HandleAsync(UpdateSupplierCommand cmd, CancellationToken ct)
         {
-            var result = await _supplierRepository.UpdateAsync(new Supplier
+            var result = _supplierRepository.Update(new Supplier
             {
                 Name = cmd.Name,
                 Email = cmd.Email,

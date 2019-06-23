@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LogisticBooking.Persistence;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
 using LogisticBooking.Queries.Queries;
 using SimpleSoft.Mediator;
 
@@ -21,14 +21,14 @@ namespace LogisticBooking.Queries.QueryHandler
 
         public async Task<IList<Order>> HandleAsync(OrdersQuery query, CancellationToken ct)
         {
-            var result = await _orderRepository.GetAllAsync();
+            var result =  _orderRepository.GetAll();
 
             return result.ToList();
         }
 
         public async Task<Order> HandleAsync(GetOrderById query, CancellationToken ct)
         {
-            var result = await _orderRepository.GetByIdAsync(query.id);
+            var result = await _orderRepository.GetById(query.id);
             return result;
         }
     }

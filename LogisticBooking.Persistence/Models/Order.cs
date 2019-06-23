@@ -20,6 +20,8 @@ namespace LogisticBooking.Persistence.Models
         }
     }
 
+    
+    
     public class Order
     {
         public Guid Id { get; set; }
@@ -30,13 +32,15 @@ namespace LogisticBooking.Persistence.Models
         public int BottomPallets { get; set; }
         public string ExternalId { get; set; }
         
-        public Guid BookingId { get; set; }
+        public virtual Guid BookingId { get; set; }
         public string CustomerNumber { get; set; }
         public string OrderNumber { get; set; }
         public int WareNumber { get; set; }
         public string InOut { get; set; }
         
         public string SupplierName { get; set; }
+        
+        
     }
 }
 

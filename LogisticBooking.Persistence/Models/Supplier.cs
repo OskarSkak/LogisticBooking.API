@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Dapper.FluentMap.Dommel.Mapping;
 
 namespace LogisticBooking.Persistence.Models
@@ -16,11 +17,14 @@ namespace LogisticBooking.Persistence.Models
         
     }
 
+    
     public class Supplier
     {
         public string Email { get; set; }
         public int Telephone { get; set; }
         public string Name { get; set; }
         public Guid ID { get; set; }
+        
+        public DateTime arriveTime { get; set; }
     }
 }

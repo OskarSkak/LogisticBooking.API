@@ -1,13 +1,10 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
-using LogisticBooking.Domain.Commands;
 using LogisticBooking.Domain.Commands.Order;
-using LogisticBooking.Events.Events;
 using LogisticBooking.Infrastructure.MessagingContracts;
+using LogisticBooking.Persistence;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
 using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
@@ -29,7 +26,7 @@ namespace LogisticBooking.Domain.CommandHandlers
 
         public async Task<IdResponse> HandleAsync(CreateOrderCommand cmd, CancellationToken ct)
         {
-            var result = await _orderRepository.InsertAsync(new Order
+            var result = _orderRepository.Insert(new Order
             {
                 Id = cmd.id,
                 BookingId = cmd.bookingId,
@@ -43,14 +40,14 @@ namespace LogisticBooking.Domain.CommandHandlers
 
         public async Task<IdResponse> HandleAsync(DeleteOrderCommand cmd, CancellationToken ct)
         {
-            var order = await _orderRepository.GetByIdAsync(cmd.id);
-            var result = await _orderRepository.DeleteByTAsync(order);
+            var order = await _orderRepository.GetById(cmd.id);
+            var result = _orderRepository.DeleteByT(order);
             return new IdResponse(cmd.id);
         }
 
         public async Task<IdResponse> HandleAsync(UpdateOrderCommand cmd, CancellationToken ct)
         {
-            var result = await _orderRepository.UpdateAsync(new Order
+            var result = _orderRepository.Update(new Order
             {
                 Id = cmd.id,
                 BookingId = cmd.bookingId,
