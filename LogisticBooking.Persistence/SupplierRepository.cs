@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using System.Linq;
 using LogisticBooking.Persistence.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LogisticBooking.Persistence
 {
@@ -30,7 +31,7 @@ namespace LogisticBooking.Persistence
 
         public Supplier GetById(Guid id)
         {
-           return _context.Suppliers.FirstOrDefault(supplier => supplier.ID == id);
+           return _context.Suppliers.AsNoTracking().FirstOrDefault(supplier => supplier.ID == id);
         }
 
         public bool DeleteById(Guid id)
@@ -56,7 +57,7 @@ namespace LogisticBooking.Persistence
 
         public List<Supplier> GetAll()
         {
-            return _context.Suppliers.ToList();
+            return _context.Suppliers.AsNoTracking().ToList();
             
         }
 
