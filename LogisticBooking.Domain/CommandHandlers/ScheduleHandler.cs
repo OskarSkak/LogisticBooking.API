@@ -19,19 +19,20 @@ namespace LogisticBooking.Domain.CommandHandlers
             _scheduleRepository = scheduleRepository;
         }
 
-        public Task<IdResponse> HandleAsync(CreateScheduleCommand cmd, CancellationToken ct)
+        public async Task<IdResponse> HandleAsync(CreateScheduleCommand cmd, CancellationToken ct)
         {
-            _scheduleRepository.Insert(new Schedule(
+            var id = Guid.NewGuid();
+            var result = _scheduleRepository.Insert(new Schedule
             {
                 shifts = cmd.Shifts,
                 CreatedBy = cmd.CreatedBy,
                 Intervals = new List<Interval>(),
                 MischellaneousPallets = cmd.MischellaneousPallets,
-                ScheduleId = Guid.NewGuid(),
+                ScheduleId = id,
                 ScheduleDay = cmd.ScheduleDay
             });
             
-            
+            return new IdResponse(id);
         }
     }
 }
