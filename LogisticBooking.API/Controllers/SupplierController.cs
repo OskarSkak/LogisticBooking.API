@@ -63,6 +63,7 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public async Task<IActionResult> DeleterSupplier(Guid id)
         {
             var result =
