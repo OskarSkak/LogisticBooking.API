@@ -1,8 +1,8 @@
-using System.Linq;
+
 using System.Threading;
 using System.Threading.Tasks;
+using LogisticBooking.Persistence;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
 using LogisticBooking.Queries.Queries.Util;
 using SimpleSoft.Mediator;
 
@@ -20,9 +20,10 @@ namespace LogisticBooking.Queries.QueryHandler
 
         public async Task<UtilBooking> HandleAsync(UtilBookingQuery query, CancellationToken ct)
         {
-            var result = await _utilBookingRepository.GetAllAsync();
-            var booking = result.First();
-            return booking;
+            
+            var result =  _utilBookingRepository.GetUtilBooking();
+            
+            return result;
         }
     }
 }

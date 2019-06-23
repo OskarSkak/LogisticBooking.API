@@ -1,4 +1,4 @@
-namespace LogisticBooking.API.ConfigHelpers
+namespace LogisticBooking.Documents.Resources
 {
     public class IdentityServerConfiguration
     {

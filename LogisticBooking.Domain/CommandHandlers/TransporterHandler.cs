@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using LogisticBooking.API;
 using LogisticBooking.Documents.Documents;
 using LogisticBooking.Domain.Commands;
 using LogisticBooking.Events.Events;
 using LogisticBooking.Infrastructure.MessagingContracts;
+using LogisticBooking.Persistence;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
 using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
@@ -15,13 +18,12 @@ namespace LogisticBooking.Domain.CommandHandlers
     public class TransporterHandler : ICommandHandler<CreateTransporterCommand, IdResponse>, ICommandHandler<UpdateTransporterCommand, IdResponse>, 
         ICommandHandler<DeleteTransporterCommand, IdResponse>
     {
-        private readonly IRegistrationRepository _registrationRepository;
         private readonly ITransporterRepository _transporterRepository;
         private readonly IEventRouter _eventRouter;
 
-        public TransporterHandler(ITransporterRepository transporterRepository, IEventRouter eventRouter , IRegistrationRepository registrationRepository)
+        public TransporterHandler(ITransporterRepository transporterRepository, IEventRouter eventRouter)
         {
-            _registrationRepository = registrationRepository;
+            
             _transporterRepository = transporterRepository;
             _eventRouter = eventRouter;
         }
@@ -33,9 +35,9 @@ namespace LogisticBooking.Domain.CommandHandlers
                 return IdResponse.Unsuccessful("Id is empty");
             }
 
-            var transporter = await _transporterRepository.GetByIdAsync(cmd.id);
+            var transporter = _transporterRepository.GetById(cmd.id);
 
-            var result = await _transporterRepository.DeleteByTAsync(transporter);
+            var result = _transporterRepository.DeleteByT(transporter);
             
             var transporterDeletedEvent = new TransporterDeletedEvent
             {
@@ -50,7 +52,7 @@ namespace LogisticBooking.Domain.CommandHandlers
         {
             var guid = Guid.NewGuid();
             // Create the transporter in the backend database
-            var BackendResult = await _transporterRepository.InsertAsync(new Transporter
+            var BackendResult = _transporterRepository.Insert(new Transporter
             {
                 ID = guid,
                 Name = cmd.Name,
@@ -59,18 +61,18 @@ namespace LogisticBooking.Domain.CommandHandlers
                 Email = cmd.Email
             });
 
-            if (BackendResult == null)
-            {
-                //#TODO  Spørg oskar hvad vi skal her? skal vi throwe exceprtion?
-                return null;
-            }
+          
 
-            await _registrationRepository.InsertAsync(new RegistrationKey
-            {
-                Username = cmd.Email,
-                SubjectId = guid.ToString(),
-                IsActive = false
-            });
+
+            var user = new Users();
+            user.Username = cmd.Email;
+            user.IsActive = false;
+            user.SubjectId = guid.ToString();
+
+
+            // Create the transporter in Identioty
+            
+            
 
             
             
@@ -84,7 +86,7 @@ namespace LogisticBooking.Domain.CommandHandlers
 
         public async Task<IdResponse> HandleAsync(UpdateTransporterCommand cmd, CancellationToken ct)
         {
-            var result = await _transporterRepository.UpdateAsync(new Transporter
+            var result = _transporterRepository.Update(new Transporter
             {
                 Name = cmd.Name, 
                 Telephone = cmd.Telephone, 

@@ -1,7 +1,7 @@
 using LogisticBooking.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using DbContext = System.Data.Entity.DbContext;
+
 
 namespace LogisticBooking.Persistence.BaseRepository
 {
@@ -9,6 +9,6 @@ namespace LogisticBooking.Persistence.BaseRepository
     {
         
         
-        public System.Data.Entity.DbSet<UtilBooking> UtilBookings { get; set; }
+        public DbSet<UtilBooking> UtilBookings { get; set; }
     }
 }

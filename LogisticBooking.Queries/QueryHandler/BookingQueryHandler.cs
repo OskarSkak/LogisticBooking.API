@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LogisticBooking.Persistence;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
 using LogisticBooking.Queries.Queries.Booking;
 using SimpleSoft.Mediator;
+
 
 namespace LogisticBooking.Queries.QueryHandler
 {
@@ -21,14 +22,16 @@ namespace LogisticBooking.Queries.QueryHandler
         
         public async Task<IList<Booking>> HandleAsync(BookingsQuery query, CancellationToken ct)
         {
-            var result = await _bookingRepository.GetAllCustom() as IList<Booking>;
+            //Get all
+            var result = _bookingRepository.GetAll();
+           
             return result;
         }
         
 
         public async Task<Booking> HandleAsync(GetBookingById query, CancellationToken ct)
         {
-            var result = await _bookingRepository.GetByIdAsync(query.id);
+            var result = _bookingRepository.GetById(query.id);
             return result;
         }
     }

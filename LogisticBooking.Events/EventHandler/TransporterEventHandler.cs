@@ -1,29 +1,24 @@
-using System;
-using System.Data.SqlClient;
-using System.Net;
+
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using DevOne.Security.Cryptography.BCrypt;
 using LogisticBooking.Events.Events;
-using LogisticBooking.Persistence.BaseRepository;
-using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
+
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using SimpleSoft.Mediator;
-using IRegistrationRepository = LogisticBooking.Persistence.Repositories.IRegistrationRepository;
+
 
 namespace LogisticBooking.Events.EventHandler
 {
     public class TransporterEventHandler : IEventHandler<TransporterCreatedEvent> , IEventHandler<TransporterDeletedEvent>
     {
-        private readonly IRegistrationRepository _registrationRepository;
+        
 
 
-        public TransporterEventHandler(IRegistrationRepository registrationRepository)
+        public TransporterEventHandler()
         {
-            _registrationRepository = registrationRepository;
+            
         }
         
         /***

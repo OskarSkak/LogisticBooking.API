@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
 using LogisticBooking.Domain.Commands.Booking;
 using LogisticBooking.Infrastructure.MessagingContracts;
+using LogisticBooking.Persistence;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
+
 using SimpleSoft.Mediator;
+using IUtilBookingRepository = LogisticBooking.Persistence.IUtilBookingRepository;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
@@ -17,26 +19,29 @@ namespace LogisticBooking.Domain.CommandHandlers
         ICommandHandler<UpdateBookingCommand, IdResponse>
 
     {
-        
+
+
 
         //************************** PROPERTIES ******************************************
         
         private readonly IEventRouter _eventRouter;
+        private readonly IBookingRepository _bookingRepository;
+
         private readonly IOrderRepository _orderRepository;
         private readonly ITransporterRepository _transporterRepository;
-        private readonly IBookingRepository _bookingRepository;
         private readonly IUtilBookingRepository _utilBookingRepository;
-        
-        
+
+
         //*************************** CONSTRUCTOR ****************************************
         
-        public BookingHandler(IBookingRepository bookingRepository, IEventRouter eventRouter , IOrderRepository orderRepository , ITransporterRepository transporterRepository , IUtilBookingRepository utilBookingRepository)
+        public BookingHandler( IEventRouter eventRouter, IBookingRepository bookingRepository, IOrderRepository orderRepository, ITransporterRepository transporterRepository, IUtilBookingRepository utilBookingRepository)
         {
-            _utilBookingRepository = utilBookingRepository;
-            _bookingRepository = bookingRepository;
+            
             _eventRouter = eventRouter;
+            _bookingRepository = bookingRepository;
             _orderRepository = orderRepository;
             _transporterRepository = transporterRepository;
+            _utilBookingRepository = utilBookingRepository;
         }
         
         
@@ -47,16 +52,14 @@ namespace LogisticBooking.Domain.CommandHandlers
         {
             if (String.IsNullOrEmpty(cmd.transporterName))
             {
-                var transporter = await _transporterRepository.GetByIdAsync(cmd.TransporterId);
+                var transporter = _transporterRepository.GetById(cmd.TransporterId);
                 cmd.transporterName = transporter.Name;
                 cmd.email = transporter.Email;
             }
 
-          
-            
-            var result = await _bookingRepository.InsertAsync(new Booking
+
+            _bookingRepository.Insert(new Booking
             {
-                
                 InternalId = cmd.internalId,
                 Email = cmd.email,
                 EndLoading = DateTime.Now,
@@ -68,9 +71,9 @@ namespace LogisticBooking.Domain.CommandHandlers
                 Port = cmd.port,
                 TransporterId = cmd.TransporterId,
                 ExternalId = cmd.ExternalId
-               
-                
             });
+            
+            
   
 
             List<Order> orders = new List<Order>();
@@ -95,30 +98,30 @@ namespace LogisticBooking.Domain.CommandHandlers
                 });
             }
 
+            
             foreach (var order in orders)
             {
-               await _orderRepository.InsertAsync(order);
+                _orderRepository.Insert(order);
             }
 
-            var utilList = await _utilBookingRepository.GetAllAsync();
-
-            var bookingid = utilList.FirstOrDefault();
             
-            var updateRequest = await _utilBookingRepository.UpdateUtil(bookingid);
+
+            
+            var updateRequest = _utilBookingRepository.Update();
 
             return new IdResponse(cmd.Id);
         }
 
         public async Task<IdResponse> HandleAsync(DeleteBookingCommand cmd, CancellationToken ct)
         {
-            var booking = await _bookingRepository.GetByIdAsync(cmd.id);
-            var result = await _bookingRepository.DeleteByTAsync(booking);
+            var booking =  _bookingRepository.GetById(cmd.id);
+            var result =  _bookingRepository.DeleteByT(booking);
             return new IdResponse(cmd.id);
         }
 
         public async Task<IdResponse> HandleAsync(UpdateBookingCommand cmd, CancellationToken ct)
         {
-            var result = await _bookingRepository.UpdateAsync(new Booking
+            var result = _bookingRepository.Update(new Booking
             {
                 Email = cmd.email,
                 ActualArrival = cmd.actualArrival,
