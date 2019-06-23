@@ -10,6 +10,10 @@ namespace LogisticBooking.Persistence.Models
         public DbSet<Transporter> Transporters { get; set; }
         
         public DbSet<UtilBooking> UtilBookings { get; set; }
+        
+        public DbSet<Interval> Intervals { get; set; }
+        
+        public DbSet<Schedule> Schedules { get; set; }
 
 
         public BackendDbContext(DbContextOptions<BackendDbContext> options) : base(options)

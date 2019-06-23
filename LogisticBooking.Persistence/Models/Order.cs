@@ -4,24 +4,6 @@ using Dapper.FluentMap.Dommel.Mapping;
 
 namespace LogisticBooking.Persistence.Models
 {
-
-    public class OrderMap : DommelEntityMap<Order>
-    {
-        public OrderMap()
-        {
-            ToTable("orders");
-            Map(x => x.Id).ToColumn("Id").IsKey();
-            Map(x => x.BookingId).ToColumn("BookingId");
-            Map(x => x.CustomerNumber).ToColumn("CustomerNumber");
-            Map(x => x.OrderNumber).ToColumn("OrderNumber");
-            Map(x => x.WareNumber).ToColumn("WareNumber");
-            Map(x => x.InOut).ToColumn("InOut");
-            Map(x => x.SupplierName).ToColumn("suppliername");
-        }
-    }
-
-    
-    
     public class Order
     {
         public Guid Id { get; set; }

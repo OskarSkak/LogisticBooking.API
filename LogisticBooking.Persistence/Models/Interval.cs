@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace LogisticBooking.Persistence.Models
 {
@@ -11,6 +12,8 @@ namespace LogisticBooking.Persistence.Models
         public Guid BookingId { get; set; }
         public Guid TransporterId { get; set; }
         public int RemainingPallets { get; set; }
-        public Guid Id { get;}
+        
+        [Key]
+        public Guid IntervalId { get; set;  }
     }
 }

@@ -114,7 +114,6 @@ namespace LogisticBooking.API
                 options.AddMap(new SupplierMap()); 
                 options.AddMap(new RegistationsKeyMap());
                 options.AddMap(new BookingMap());
-                options.AddMap(new OrderMap());
                 options.AddMap(new UtilBookingMap());
                 options.ForDommel();
             });
