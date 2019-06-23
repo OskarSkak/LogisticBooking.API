@@ -69,12 +69,16 @@ namespace LogisticBooking.Persistence
 
         public bool Insert(Schedule t)
         {
-            
+            _context.Schedules.Add(t);
+            _context.SaveChanges();
+            return true;
         }
 
         public bool InsertMany(List<Schedule> t)
         {
-            throw new NotImplementedException();
+            _context.Schedules.AddRange(t);
+            _context.SaveChanges();
+            return true;
         }
     }
 }
