@@ -4,14 +4,16 @@ using LogisticBooking.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LogisticBooking.API.Migrations
 {
     [DbContext(typeof(BackendDbContext))]
-    partial class BackendDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190625153850_init1.4")]
+    partial class init14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,8 +67,6 @@ namespace LogisticBooking.API.Migrations
                     b.Property<int>("RemainingPallets");
 
                     b.Property<Guid?>("ScheduleId");
-
-                    b.Property<Guid>("SecondaryBookingId");
 
                     b.Property<DateTime>("StartTime");
 
