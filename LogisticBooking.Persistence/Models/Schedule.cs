@@ -17,6 +17,7 @@ namespace LogisticBooking.Persistence.Models
         public Guid CreatedBy { get; set; }
         public int MischellaneousPallets { get; set; }
         public Shift shifts { get; set; }
+        public string Name { get; set; }
         
         [Key]
         public Guid ScheduleId { get; set; }

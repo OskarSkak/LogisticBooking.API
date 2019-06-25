@@ -11,6 +11,7 @@ namespace LogisticBooking.API.RequestModels
         public int MischellaneousPallets { get; set; }
         public Shift shifts { get; set; }
         public List<Interval> Intervals { get; set; }
+        public string Name { get; set; }
         public Guid ScheduleId { get; set; }
     }
 }

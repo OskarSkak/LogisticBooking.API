@@ -16,8 +16,9 @@ namespace LogisticBooking.Domain.Commands.ScheduleCommands
         public Shift Shifts { get; set; }
         public List<Interval> Intervals { get; set; }
         public Guid ScheduleId { get; set; }
+        public string Name { get; set; }
         
-        public CreateScheduleCommand(DateTime scheduleDay , Guid createdBy , int mischellaneousPallets , Shift shift, List<Interval> intervals, Guid scheduleId)
+        public CreateScheduleCommand(DateTime scheduleDay , Guid createdBy , int mischellaneousPallets , Shift shift, List<Interval> intervals, Guid scheduleId, string name)
         {
             ScheduleDay = scheduleDay;
             CreatedBy = createdBy;
@@ -25,6 +26,7 @@ namespace LogisticBooking.Domain.Commands.ScheduleCommands
             Shifts = shift;
             Intervals = intervals;
             ScheduleId = scheduleId;
+            Name = name;
         }
     }
 }
