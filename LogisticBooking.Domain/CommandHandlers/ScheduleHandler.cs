@@ -31,7 +31,8 @@ namespace LogisticBooking.Domain.CommandHandlers
                 Intervals = cmd.Intervals,
                 MischellaneousPallets = cmd.MischellaneousPallets,
                 ScheduleId = id,
-                ScheduleDay = cmd.ScheduleDay
+                ScheduleDay = cmd.ScheduleDay,
+                Name = cmd.Name
             });
             
             return new IdResponse(id);
