@@ -20,12 +20,14 @@ namespace LogisticBooking.Domain.CommandHandlers
     {
         private readonly ITransporterRepository _transporterRepository;
         private readonly IEventRouter _eventRouter;
+        private readonly testContext _context;
 
-        public TransporterHandler(ITransporterRepository transporterRepository, IEventRouter eventRouter)
+        public TransporterHandler(ITransporterRepository transporterRepository, IEventRouter eventRouter , testContext context)
         {
             
             _transporterRepository = transporterRepository;
             _eventRouter = eventRouter;
+            _context = context;
         }
 
         public async Task<IdResponse> HandleAsync(DeleteTransporterCommand cmd, CancellationToken ct)
@@ -38,7 +40,10 @@ namespace LogisticBooking.Domain.CommandHandlers
             var transporter = _transporterRepository.GetById(cmd.id);
 
             var result = _transporterRepository.DeleteByT(transporter);
-            
+
+            var user = _context.Users.Find(cmd.id.ToString());
+            _context.Users.Remove(user);
+            _context.SaveChanges();
             var transporterDeletedEvent = new TransporterDeletedEvent
             {
                 TransporterId = cmd.id
@@ -60,22 +65,16 @@ namespace LogisticBooking.Domain.CommandHandlers
                 Address = cmd.Address,
                 Email = cmd.Email
             });
-
-          
-
-
+            
             var user = new Users();
             user.Username = cmd.Email;
             user.IsActive = false;
             user.SubjectId = guid.ToString();
 
 
+            _context.Users.Add(user);
+            _context.SaveChanges();
             // Create the transporter in Identioty
-            
-            
-
-            
-            
             var transporter = new TransporterCreatedEvent();
             transporter.Email = cmd.Email;
             transporter.Id = guid;

@@ -2,8 +2,9 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using LogisticBooking.Documents.Resources;
 using LogisticBooking.Events.Events;
-
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using SimpleSoft.Mediator;
@@ -13,12 +14,12 @@ namespace LogisticBooking.Events.EventHandler
 {
     public class TransporterEventHandler : IEventHandler<TransporterCreatedEvent> , IEventHandler<TransporterDeletedEvent>
     {
-        
+        private readonly IOptions<IdentityServerConfiguration> _serviceSettings;
 
 
-        public TransporterEventHandler()
+        public TransporterEventHandler(IOptions<IdentityServerConfiguration> serviceSettings)
         {
-            
+            _serviceSettings = serviceSettings;
         }
         
         /***
@@ -34,8 +35,12 @@ namespace LogisticBooking.Events.EventHandler
             var from = new EmailAddress("AutoMail@LogisticSolutions.dk");
             var subject = "Activation link to Booking Planner";
             var to = new EmailAddress(evt.Email);
-            var plaintext = "Hi and welcome to Booking planner\n To activate you're account you have to visit the link attached in this email and create a passsword. \n If you have any issues please contact us  ";
-            var htmlContent = plaintext +  "https://localhost:5025/CreateUser/"+ evt.Id;
+            var plaintext = "<h2>Welcome</h2><span>Agri-Norcold has invited you to try out the new platform for booking</span> </br><span>First you need to go in and create a new password for the account that was created for you <a href=" +
+                            "";
+
+            var plaintext1 = " " + " > here</a> "+ "</span></br> If you have any questions, please contact us at <a href=" +
+                             "https://logistictechnologies.eu/" + " >Logistic Technologies</a></br> ";
+            var htmlContent = plaintext + _serviceSettings.Value.IdentityServerUrl + "/User/" + evt.Id + plaintext1;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plaintext, htmlContent);
             var response = await client.SendEmailAsync(msg);
             
