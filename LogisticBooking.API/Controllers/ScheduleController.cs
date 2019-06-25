@@ -28,7 +28,7 @@ namespace LogisticBooking.API.Controllers
         {
             var result = await CommandRouter.RouteAsync<CreateScheduleCommand, IdResponse>(
                 new CreateScheduleCommand(scheduleRequesteModel.ScheduleDay, scheduleRequesteModel.CreatedBy,
-                    scheduleRequesteModel.MischellaneousPallets, scheduleRequesteModel.shifts));
+                    scheduleRequesteModel.MischellaneousPallets, scheduleRequesteModel.shifts, scheduleRequesteModel.Intervals, scheduleRequesteModel.ScheduleId));
 
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }

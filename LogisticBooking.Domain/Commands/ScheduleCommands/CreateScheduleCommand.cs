@@ -14,13 +14,17 @@ namespace LogisticBooking.Domain.Commands.ScheduleCommands
         public Guid CreatedBy { get; set; }
         public int MischellaneousPallets { get; set; }
         public Shift Shifts { get; set; }
+        public List<Interval> Intervals { get; set; }
+        public Guid ScheduleId { get; set; }
         
-        public CreateScheduleCommand(DateTime scheduleDay , Guid createdBy , int mischellaneousPallets , Shift shift)
+        public CreateScheduleCommand(DateTime scheduleDay , Guid createdBy , int mischellaneousPallets , Shift shift, List<Interval> intervals, Guid scheduleId)
         {
             ScheduleDay = scheduleDay;
             CreatedBy = createdBy;
             MischellaneousPallets = mischellaneousPallets;
             Shifts = shift;
+            Intervals = intervals;
+            ScheduleId = scheduleId;
         }
     }
 }

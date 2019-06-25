@@ -22,11 +22,13 @@ namespace LogisticBooking.Domain.CommandHandlers
         public async Task<IdResponse> HandleAsync(CreateScheduleCommand cmd, CancellationToken ct)
         {
             var id = Guid.NewGuid();
+            if (cmd.ScheduleId != Guid.Empty) id = cmd.ScheduleId;
+            
             var result = _scheduleRepository.Insert(new Schedule
             {
                 shifts = cmd.Shifts,
                 CreatedBy = cmd.CreatedBy,
-                Intervals = new List<Interval>(),
+                Intervals = cmd.Intervals,
                 MischellaneousPallets = cmd.MischellaneousPallets,
                 ScheduleId = id,
                 ScheduleDay = cmd.ScheduleDay
