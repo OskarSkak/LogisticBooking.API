@@ -32,9 +32,10 @@ namespace LogisticBooking.Persistence
         
         public Schedule GetById(Guid id)
         {
-            var result = _context.Schedules.AsNoTracking().FirstOrDefault(schedule => schedule.ScheduleId == id);
+            var result = _context.Schedules.AsNoTracking().Include(x => x.Intervals);
             _context.SaveChanges();
-            return result;
+            var a =  result.FirstOrDefault(x => x.ScheduleId == id);
+            return a;
         }
 
         public bool DeleteById(Guid id)
@@ -76,6 +77,7 @@ namespace LogisticBooking.Persistence
 
         public bool InsertMany(List<Schedule> t)
         {
+
             _context.Schedules.AddRange(t);
             _context.SaveChanges();
             return true;
