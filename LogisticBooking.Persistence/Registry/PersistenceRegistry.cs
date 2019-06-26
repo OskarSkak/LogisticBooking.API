@@ -1,6 +1,3 @@
-using LogisticBooking.Persistence.BaseRepository;
-using LogisticBooking.Persistence.Repositories;
-using LogisticBooking.Persistence.Services;
 
 namespace LogisticBooking.Persistence.Registry
 {

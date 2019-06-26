@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Design;
 using StructureMap.Building;
 using Dapper.FluentMap.Dommel.Mapping;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LogisticBooking.Persistence.Models
 {
@@ -31,6 +34,7 @@ namespace LogisticBooking.Persistence.Models
         
     }
 
+    
     public class Booking
     {
         
@@ -46,11 +50,13 @@ namespace LogisticBooking.Persistence.Models
     public DateTime StartLoading { get; set; }
     public DateTime EndLoading { get; set; }
 
-    [ForeignKey("bookingid")] 
+    
+    [Key()]
     public Guid InternalId { get; set; }
     public string Email { get; set; }
 
-    public List<Order> Orders { get; set; }
+    
+    public virtual List<Order> Orders { get; set; }
 
     public Guid TransporterId { get; set; }
     }

@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using Dapper.FluentMap;
 using Dapper.FluentMap.Dommel;
 using IdentityServer4.AccessTokenValidation;
-using LogisticBooking.API.ConfigHelpers;
+using LogisticBooking.Documents.Resources;
 using LogisticBooking.Persistence.BaseRepository;
 using LogisticBooking.Persistence.Models;
-using LogisticBooking.Persistence.Repositories;
 using LogisticBooking.Persistence.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -63,8 +62,22 @@ namespace LogisticBooking.API
                     options.RequireHttpsMetadata = true;
                     options.ApiName = "logisticbookingapi";
                 });
+
+
+
+            services.AddDbContext<testContext>(options =>
+            {
+                options.UseLazyLoadingProxies();
+                options.UseSqlServer(
+                    "Server=tcp:logistictechnologies.database.windows.net,1433;Initial Catalog=test;Persist Security Info=False;User ID=LG_admin;Password=Hjallesevej50;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            });
+
+            services.AddDbContext<BackendDbContext>(options =>
+            {
+                options.UseSqlServer(
+                    "Server=tcp:logistictechnologies.database.windows.net,1433;Initial Catalog=BackendDb;Persist Security Info=False;User ID=LG_admin;Password=Hjallesevej50;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" ,  b => b.MigrationsAssembly("LogisticBooking.API"));
+            });
             
-   
 
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -101,7 +114,6 @@ namespace LogisticBooking.API
                 options.AddMap(new SupplierMap()); 
                 options.AddMap(new RegistationsKeyMap());
                 options.AddMap(new BookingMap());
-                options.AddMap(new OrderMap());
                 options.AddMap(new UtilBookingMap());
                 options.ForDommel();
             });
