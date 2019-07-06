@@ -65,6 +65,25 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpGet]
+        [Route("{from}/{to}")]
+        public async Task<IActionResult> GetBookingsInbetweenDate(DateTime from, DateTime to)
+        {
+            var allBookings = await QueryRouter.QueryAsync<BookingsQuery, IList<Booking>>(new BookingsQuery());
+            var bookingsBetweenDate = new List<Booking>(); 
+
+            foreach (var booking in allBookings)
+            {
+                if ((DateTime.Compare(from, booking.BookingTime) < 0) &&
+                    (DateTime.Compare(to, booking.BookingTime) > 0))
+                {
+                    bookingsBetweenDate.Add(booking);
+                }
+            }
+            
+            return new ObjectResult(bookingsBetweenDate);
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetBookingById(Guid id)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -27,6 +28,23 @@ namespace LogisticBooking.Queries.QueryHandler
            
             return result;
         }
+
+       /* public async Task<IList<Booking>> HandleAsync(GetBookingsInbetweenDatesQuery query, CancellationToken ct)
+        {
+            var allBookings = _bookingRepository.GetAll();
+            var bookingsBetweenDate = new List<Booking>(); 
+
+            foreach (var booking in allBookings)
+            {
+                if (!(DateTime.Compare(query.From, booking.BookingTime) < 0) &&
+                    !(DateTime.Compare(query.To, booking.BookingTime) > 0))
+                {
+                    bookingsBetweenDate.Add(booking);
+                }
+            }
+
+            return bookingsBetweenDate;
+        }*/
         
 
         public async Task<Booking> HandleAsync(GetBookingById query, CancellationToken ct)
