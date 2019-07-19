@@ -8,7 +8,7 @@ using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Queries.QueryHandler
 {
-    public class ScheduleQueryHandler : IQueryHandler<SchedulesQuery , List<Schedule>>
+    public class ScheduleQueryHandler : IQueryHandler<SchedulesQuery , List<Schedule>> , IQueryHandler<ScheduleByIdQuery , Schedule> , IQueryHandler<ScheduleByDateQuery , Schedule>
     {
         private readonly IScheduleRepository _scheduleRepository;
 
@@ -21,6 +21,16 @@ namespace LogisticBooking.Queries.QueryHandler
         public async Task<List<Schedule>> HandleAsync(SchedulesQuery query, CancellationToken ct)
         {
             return _scheduleRepository.GetAll();
+        }
+
+        public async Task<Schedule> HandleAsync(ScheduleByIdQuery query, CancellationToken ct)
+        {
+            return _scheduleRepository.GetById(query.ScheduleId);
+        }
+
+        public async Task<Schedule> HandleAsync(ScheduleByDateQuery query, CancellationToken ct)
+        {
+            return  _scheduleRepository.GetScheduleByDate(query.Date);
         }
     }
 }

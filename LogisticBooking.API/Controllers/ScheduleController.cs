@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LogisticBooking.API.RequestModels;
@@ -5,6 +6,8 @@ using LogisticBooking.Documents.Documents;
 using LogisticBooking.Domain.Commands.ScheduleCommands;
 using LogisticBooking.Infrastructure.MessagingContracts;
 using LogisticBooking.Persistence.Models;
+using LogisticBooking.Queries.Queries;
+using LogisticBooking.Queries.Queries.Booking;
 using LogisticBooking.Queries.Queries.ScheduleQueries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +51,57 @@ namespace LogisticBooking.API.Controllers
             return new ObjectResult(result);
         }
         
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetScheduleById(Guid id)
+        {
+
+            var result = await QueryRouter.QueryAsync<ScheduleByIdQuery, Schedule>(new ScheduleByIdQuery(id));
+            
+            return new ObjectResult(result);
+        }
+
+        [HttpPost]
+        [Route("list")]
+        public async Task<IActionResult> InsertManySchedules(
+            [FromBody] ManySchedulesRequestModels scheduleRequesteModels)
+        {
+        
+            List<Schedule> list = new List<Schedule>();
+            foreach (var VARIABLE in scheduleRequesteModels.Schedules)
+            {
+                list.Add(new Schedule
+                {
+                    CreatedBy = VARIABLE.CreatedBy,
+                    Intervals = VARIABLE.Intervals,
+                    MischellaneousPallets = VARIABLE.MischellaneousPallets,
+                    Name = VARIABLE.Name,
+                    ScheduleDay = VARIABLE.ScheduleDay,
+                    ScheduleId = VARIABLE.ScheduleId
+                    
+                });
+            }
+
+            var result =
+                await CommandRouter.RouteAsync<InserManySchedulesCommand, IdResponse>(
+                    new InserManySchedulesCommand(list));
+            
+            return new ObjectResult(result);
+        }
+     
+        [HttpGet]
+        [Route("date")]
+        public async Task<IActionResult> GetScheduleByDate(DateTime date)
+        {
+
+            var result = await QueryRouter.QueryAsync<ScheduleByDateQuery, Schedule>(new ScheduleByDateQuery(date));
+            
+            return new ObjectResult(result);
+        }
+        
+        
+        
+
         
     }
 }

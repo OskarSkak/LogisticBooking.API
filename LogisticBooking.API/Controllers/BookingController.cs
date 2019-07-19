@@ -26,21 +26,22 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNewBooking([FromBody] BookingRequestModel bookingRequestModel)
+        [Route("{id}")]
+        public async Task<IActionResult> CreateNewBooking([FromBody] CreateBookingRequestModel createBookingRequestModel)
         {
             
            var loggedIn = User.Claims.FirstOrDefault(c => c.Type == "sub").Value;
             Guid LoggedInID = new Guid(loggedIn);
             List<Order> orders = new List<Order>();
 
-            foreach (var order in bookingRequestModel.Orders)
+            foreach (var order in createBookingRequestModel.Booking.Orders)
             {
                orders.Add(new Order
                {
-                   BookingId = order.bookingId,
-                   CustomerNumber = order.customerNumber,
-                   WareNumber = order.wareNumber,
-                   OrderNumber = order.orderNumber,
+                   BookingId = order.BookingId,
+                   CustomerNumber = order.CustomerNumber,
+                   WareNumber = order.WareNumber,
+                   OrderNumber = order.OrderNumber,
                    InOut = order.InOut,
                    TotalPallets = order.TotalPallets,
                    ExternalId = order.ExternalId,
@@ -51,9 +52,9 @@ namespace LogisticBooking.API.Controllers
             }
             
             var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
-                new CreateBookingCommand(bookingRequestModel.totalPallets, bookingRequestModel.bookingTime,
-                    bookingRequestModel.transporterName, bookingRequestModel.port, bookingRequestModel.actualArrival,
-                    bookingRequestModel.startLoading, bookingRequestModel.endLoading, bookingRequestModel.email , orders ,LoggedInID, bookingRequestModel.ExternalId , LoggedInID ));
+                new CreateBookingCommand(createBookingRequestModel.Booking.TotalPallets, createBookingRequestModel.Booking.BookingTime,
+                    createBookingRequestModel.Booking.TransporterName, createBookingRequestModel.Booking.Port, createBookingRequestModel.Booking.ActualArrival,
+                    createBookingRequestModel.Booking.StartLoading, createBookingRequestModel.Booking.EndLoading, createBookingRequestModel.Booking.Email , orders ,LoggedInID, createBookingRequestModel.Booking.ExternalId , LoggedInID , createBookingRequestModel.Schedule.ScheduleId , createBookingRequestModel.IntervalId ));
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 

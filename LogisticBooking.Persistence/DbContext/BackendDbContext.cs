@@ -20,6 +20,8 @@ namespace LogisticBooking.Persistence.Models
         {
             
         }
+        
+        
 
         
     }

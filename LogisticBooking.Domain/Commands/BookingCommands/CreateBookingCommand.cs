@@ -23,11 +23,13 @@ namespace LogisticBooking.Domain.Commands.Booking
         public int ExternalId { get; set; }
         
         public Guid TransporterIdToGetName { get; set; }
-        
+        public Guid ScheduleId { get; set; }
+        public Guid IntervalId { get; set; }
+
         public List<Persistence.Models.Order> Orders { get; set; }
 
 
-        public CreateBookingCommand( int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email , List<Persistence.Models.Order> orders, Guid transporterId, int ExternalId, Guid transporterIdToGetName)
+        public CreateBookingCommand( int totalPallets, DateTime bookingTime, string transporterName, int port, DateTime actualArrival, DateTime startLoading, DateTime endLoading, string email , List<Persistence.Models.Order> orders, Guid transporterId, int ExternalId, Guid transporterIdToGetName , Guid ScheduleId , Guid IntervalId)
         
         {
             TransporterId = transporterId;
@@ -43,8 +45,8 @@ namespace LogisticBooking.Domain.Commands.Booking
             this.internalId = Guid.NewGuid();
             this.ExternalId = ExternalId;
             TransporterIdToGetName = transporterIdToGetName;
-
-
+            this.ScheduleId = ScheduleId;
+            this.IntervalId = IntervalId;
         }
        
         public CreateBookingCommand(){}

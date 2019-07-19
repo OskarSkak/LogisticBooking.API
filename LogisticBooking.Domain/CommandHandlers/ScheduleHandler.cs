@@ -10,7 +10,7 @@ using SimpleSoft.Mediator;
 
 namespace LogisticBooking.Domain.CommandHandlers
 {
-    public class ScheduleHandler : ICommandHandler<CreateScheduleCommand , IdResponse>
+    public class ScheduleHandler : ICommandHandler<CreateScheduleCommand , IdResponse> , ICommandHandler<InserManySchedulesCommand , IdResponse>
     {
         private readonly IScheduleRepository _scheduleRepository;
 
@@ -36,6 +36,29 @@ namespace LogisticBooking.Domain.CommandHandlers
             });
             
             return new IdResponse(id);
+        }
+
+        public async Task<IdResponse> HandleAsync(InserManySchedulesCommand cmd, CancellationToken ct)
+        {
+            
+           List<Schedule> schedules = new List<Schedule>();
+
+           foreach (var schedule in cmd.Schedules)
+           {
+               schedules.Add(new Schedule
+               {
+                   CreatedBy = schedule.CreatedBy,
+                   Intervals = schedule.Intervals,
+                   MischellaneousPallets = schedule.MischellaneousPallets,
+                   Name = schedule.Name,
+                   ScheduleDay = schedule.ScheduleDay,
+                   ScheduleId = schedule.ScheduleId,
+                   shifts = schedule.shifts
+
+               });
+           }
+            var result =  _scheduleRepository.InsertMany(schedules);
+            return new IdResponse(Guid.Empty);
         }
     }
 }
