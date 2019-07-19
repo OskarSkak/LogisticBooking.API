@@ -88,7 +88,20 @@ namespace LogisticBooking.API.Controllers
             
             return new ObjectResult(result);
         }
+     
+        [HttpGet]
+        [Route("date")]
+        public async Task<IActionResult> GetScheduleByDate(DateTime date)
+        {
+
+            var result = await QueryRouter.QueryAsync<ScheduleByDateQuery, Schedule>(new ScheduleByDateQuery(date));
+            
+            return new ObjectResult(result);
+        }
         
+        
+        
+
         
     }
 }

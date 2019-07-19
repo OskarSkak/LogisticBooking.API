@@ -16,6 +16,8 @@ namespace LogisticBooking.Persistence
         List<Schedule> GetAll();
         bool Insert(Schedule t);
         bool InsertMany(List<Schedule> t);
+
+        Schedule GetScheduleByDate(DateTime date);
     }
     
     
@@ -81,6 +83,13 @@ namespace LogisticBooking.Persistence
             _context.Schedules.AddRange(t);
             _context.SaveChanges();
             return true;
+        }
+
+        public Schedule GetScheduleByDate(DateTime date)
+        {
+            var result = _context.Schedules.Include(x => x.Intervals).FirstOrDefault(x => x.ScheduleDay.Equals(date));
+            _context.SaveChanges();
+            return result;
         }
     }
 }
