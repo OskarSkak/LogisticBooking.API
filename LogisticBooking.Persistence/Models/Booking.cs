@@ -38,7 +38,7 @@ namespace LogisticBooking.Persistence.Models
     public class Booking
     {
         
-        
+    
     public int ExternalId { get; set; }
         
     public int TotalPallets { get; set; }

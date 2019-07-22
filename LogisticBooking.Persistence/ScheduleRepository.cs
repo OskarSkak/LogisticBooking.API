@@ -73,6 +73,7 @@ namespace LogisticBooking.Persistence
         public bool Insert(Schedule t)
         {
             _context.Schedules.Add(t);
+            
             _context.SaveChanges();
             return true;
         }
@@ -80,6 +81,7 @@ namespace LogisticBooking.Persistence
         public bool InsertMany(List<Schedule> t)
         {
 
+            _context.SaveChanges();
             _context.Schedules.AddRange(t);
             _context.SaveChanges();
             return true;
