@@ -51,10 +51,41 @@ namespace LogisticBooking.API.Controllers
                }); 
             }
             
-            var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
-                new CreateBookingCommand(createBookingRequestModel.Booking.TotalPallets, createBookingRequestModel.Booking.BookingTime,
-                    createBookingRequestModel.Booking.TransporterName, createBookingRequestModel.Booking.Port, createBookingRequestModel.Booking.ActualArrival,
-                    createBookingRequestModel.Booking.StartLoading, createBookingRequestModel.Booking.EndLoading, createBookingRequestModel.Booking.Email , orders ,LoggedInID, createBookingRequestModel.Booking.ExternalId , LoggedInID , createBookingRequestModel.Schedule.ScheduleId , createBookingRequestModel.IntervalId ));
+           /* var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(
+                new CreateBookingCommand(
+                    createBookingRequestModel.Booking.TotalPallets, 
+                    createBookingRequestModel.Booking.BookingTime,
+                    createBookingRequestModel.Booking.TransporterName, 
+                    createBookingRequestModel.Booking.Port, 
+                    createBookingRequestModel.Booking.ActualArrival,
+                    createBookingRequestModel.Booking.StartLoading, 
+                    createBookingRequestModel.Booking.EndLoading,
+                    createBookingRequestModel.Booking.Email ,
+                    orders ,
+                    LoggedInID,
+                    createBookingRequestModel.Booking.ExternalId ,
+                    LoggedInID ,
+                    createBookingRequestModel.Schedule.ScheduleId , 
+                    createBookingRequestModel.IntervalId ));*/
+
+            var result = await CommandRouter.RouteAsync<CreateBookingCommand, IdResponse>(new CreateBookingCommand
+            {
+                totalPallets = createBookingRequestModel.Booking.TotalPallets,
+                bookingTime = createBookingRequestModel.Booking.BookingTime,
+                transporterName = createBookingRequestModel.Booking.TransporterName,
+                port = createBookingRequestModel.Booking.Port,
+                actualArrival = default(DateTime),
+                startLoading = default(DateTime),
+                endLoading = default(DateTime),
+                email = createBookingRequestModel.Booking.Email,
+                Orders = orders,
+                TransporterId = LoggedInID,
+                ExternalId = createBookingRequestModel.Booking.ExternalId,
+                TransporterIdToGetName = LoggedInID,
+                ScheduleId = createBookingRequestModel.Schedule.ScheduleId,
+                IntervalId = createBookingRequestModel.IntervalId
+             });
+            
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
 

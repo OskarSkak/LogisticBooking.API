@@ -71,6 +71,10 @@ namespace LogisticBooking.Persistence
 
         public bool Insert(Booking t)
         {
+            t.EndLoading = default(DateTime);
+            t.StartLoading = default(DateTime);
+            t.ActualArrival = default(DateTime);
+            
             _context.Bookings.Add(t);
             var result = Save();
             return result;
