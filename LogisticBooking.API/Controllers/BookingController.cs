@@ -26,7 +26,7 @@ namespace LogisticBooking.API.Controllers
         }
 
         [HttpPost]
-        [Route("{id}")]
+        
         public async Task<IActionResult> CreateNewBooking([FromBody] CreateBookingRequestModel createBookingRequestModel)
         {
             

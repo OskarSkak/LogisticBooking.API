@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using LogisticBooking.Documents.Documents;
@@ -30,11 +31,13 @@ namespace LogisticBooking.Domain.CommandHandlers
         private readonly IOrderRepository _orderRepository;
         private readonly ITransporterRepository _transporterRepository;
         private readonly IUtilBookingRepository _utilBookingRepository;
+        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IIntervalsRepository _intervalsRepository;
 
 
         //*************************** CONSTRUCTOR ****************************************
         
-        public BookingHandler( IEventRouter eventRouter, IBookingRepository bookingRepository, IOrderRepository orderRepository, ITransporterRepository transporterRepository, IUtilBookingRepository utilBookingRepository)
+        public BookingHandler( IEventRouter eventRouter, IBookingRepository bookingRepository, IOrderRepository orderRepository, ITransporterRepository transporterRepository, IUtilBookingRepository utilBookingRepository , IScheduleRepository scheduleRepository , IIntervalsRepository intervalsRepository)
         {
             
             _eventRouter = eventRouter;
@@ -42,6 +45,8 @@ namespace LogisticBooking.Domain.CommandHandlers
             _orderRepository = orderRepository;
             _transporterRepository = transporterRepository;
             _utilBookingRepository = utilBookingRepository;
+            _scheduleRepository = scheduleRepository;
+            _intervalsRepository = intervalsRepository;
         }
         
         
@@ -56,6 +61,27 @@ namespace LogisticBooking.Domain.CommandHandlers
                 cmd.transporterName = transporter.Name;
                 cmd.email = transporter.Email;
             }
+            
+            // Get the current chosen Schedule
+            var inter = _intervalsRepository.GetById(cmd.IntervalId);
+            
+            
+            // Find the interval and put the booking on
+            if (inter.BookingId.Equals(Guid.Empty))
+            {
+                inter.BookingId = cmd.internalId;
+                inter.RemainingPallets -= cmd.totalPallets;
+            } else if (inter.SecondaryBookingId.Equals(Guid.Empty))
+            {
+                inter.SecondaryBookingId = cmd.internalId;
+                inter.RemainingPallets -= cmd.totalPallets;
+                inter.IsBooked = true;
+            }
+
+            _intervalsRepository.Update(inter);
+            
+           
+            
 
 
             _bookingRepository.Insert(new Booking
@@ -99,13 +125,13 @@ namespace LogisticBooking.Domain.CommandHandlers
             }
 
             
+            
             foreach (var order in orders)
             {
                 _orderRepository.Insert(order);
             }
 
             
-
             
             var updateRequest = _utilBookingRepository.Update();
 
