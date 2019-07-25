@@ -31,7 +31,9 @@ namespace LogisticBooking.Domain.CommandHandlers
                 ID = cmd.ID,
                 Name = cmd.Name,
                 Telephone = cmd.Telephone,
-                Email = cmd.Email
+                Email = cmd.Email,
+                DeliveryStart = cmd.DeliveryStart,
+                DeliveryEnd = cmd.DeliveryEnd
             });
 
             return new IdResponse(cmd.ID);

@@ -25,7 +25,7 @@ namespace LogisticBooking.API.Controllers
         {
             var result = await CommandRouter.RouteAsync<CreateSupplierCommand, IdResponse>(
                 new CreateSupplierCommand(supplierRequestModel.Email,
-                supplierRequestModel.Telephone, supplierRequestModel.Name));
+                supplierRequestModel.Telephone, supplierRequestModel.Name , supplierRequestModel.DeliveryStart , supplierRequestModel.DeliveryEnd));
 
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
