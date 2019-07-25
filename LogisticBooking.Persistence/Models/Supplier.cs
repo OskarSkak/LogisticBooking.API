@@ -26,5 +26,10 @@ namespace LogisticBooking.Persistence.Models
         public Guid ID { get; set; }
         
         public DateTime arriveTime { get; set; }
+        
+        // Leverings vindue for kunden
+        public DateTime DeliveryStart { get; set; }
+        
+        public DateTime DeliveryEnd { get; set; }
     }
 }
