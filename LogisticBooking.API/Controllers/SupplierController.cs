@@ -46,10 +46,11 @@ namespace LogisticBooking.API.Controllers
             if (String.IsNullOrEmpty(supplierRequestModel.Name)) supplierRequestModel.Name = supplier.Name;
             if (String.IsNullOrEmpty(supplierRequestModel.Email)) supplierRequestModel.Email = supplier.Email;
             if (supplierRequestModel.Telephone == 0) supplierRequestModel.Telephone = supplier.Telephone;
+            
 
             var result = await CommandRouter.RouteAsync<UpdateSupplierCommand, IdResponse>(
                 new UpdateSupplierCommand(supplierRequestModel.Email, supplierRequestModel.Telephone,
-                    supplierRequestModel.Name, id)
+                    supplierRequestModel.Name, id , supplierRequestModel.DeliveryStart , supplierRequestModel.DeliveryEnd)
             );
             return !result.IsSuccessful ? Conflict(result) : new ObjectResult(result);
         }
